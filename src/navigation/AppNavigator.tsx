@@ -48,7 +48,7 @@ export const AppNavigator: React.FC<AppNavigatorProps> = ({ initialRoute }) => {
       <Stack.Screen
         name="Main"
         component={MainScreen}
-        options={{ title: 'Stretcher' }}
+        options={{ title: 'Stretch' }}
       />
       <Stack.Screen
         name="TrainingList"

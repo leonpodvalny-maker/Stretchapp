@@ -2,70 +2,153 @@ import React, { useState, useMemo } from 'react';
 import {
   View,
   Text,
+  FlatList,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
   SafeAreaView,
+  StatusBar,
+  Modal,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { useLanguage } from '../context/LanguageContext';
 import { useApp } from '../context/AppContext';
+import { useLanguage } from '../context/LanguageContext';
 import { defaultTrainings } from '../data/trainings';
+import { Training } from '../types';
 import TrainingCard from '../components/TrainingCard';
 import SettingsDropdown from '../components/SettingsDropdown';
-import { colors, spacing, fontSize, shadows } from '../utils/theme';
+import { colors, spacing, fontSize, borderRadius } from '../utils/theme';
 
-type NavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
+type MainScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Main'>;
 
-export default function MainScreen() {
-  const navigation = useNavigation<NavigationProp>();
-  const { translate } = useLanguage();
+interface MainScreenProps {
+  navigation: MainScreenNavigationProp;
+}
+
+/**
+ * MainScreen component displays all available trainings (default + custom)
+ * and provides access to settings, calendar, and custom trainings through a dropdown menu.
+ */
+const MainScreen: React.FC<MainScreenProps> = ({ navigation }) => {
   const { customTrainings } = useApp();
-  const [showDropdown, setShowDropdown] = useState(false);
+  const { translate } = useLanguage();
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
-  const allTrainings = useMemo(
-    () => [...defaultTrainings, ...customTrainings],
-    [customTrainings]
+  // Combine default trainings with custom trainings
+  const allTrainings = useMemo<Training[]>(() => {
+    return [...defaultTrainings, ...customTrainings];
+  }, [customTrainings]);
+
+  /**
+   * Handles navigation when a training card is pressed
+   */
+  const handleTrainingPress = (trainingId: string) => {
+    navigation.navigate('TrainingList', { trainingId });
+  };
+
+  /**
+   * Toggles the settings dropdown menu
+   */
+  const toggleDropdown = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
+
+  /**
+   * Handles navigation from the dropdown menu
+   */
+  const handleNavigate = (screen: keyof RootStackParamList) => {
+    navigation.navigate(screen as any);
+  };
+
+  /**
+   * Closes the dropdown menu when clicking outside
+   */
+  const closeDropdown = () => {
+    setIsDropdownVisible(false);
+  };
+
+  /**
+   * Renders each training card
+   */
+  const renderTrainingItem = ({ item }: { item: Training }) => (
+    <TrainingCard
+      training={item}
+      onPress={() => handleTrainingPress(item.id)}
+    />
   );
 
-  const handleNavigate = (screen: keyof RootStackParamList) => {
-    setShowDropdown(false);
-    navigation.navigate(screen as any); // Type assertion needed due to varying param types
-  };
+  /**
+   * Renders the header with app title and settings button
+   */
+  const renderHeader = () => (
+    <View style={styles.header}>
+      <Text style={styles.headerTitle}>{translate('appName')}</Text>
+      <TouchableOpacity
+        style={styles.settingsButton}
+        onPress={toggleDropdown}
+        accessibilityLabel={translate('settings')}
+        accessibilityHint="Open settings menu"
+        accessibilityRole="button"
+      >
+        <View style={styles.settingsIcon}>
+          <View style={styles.settingsDot} />
+          <View style={styles.settingsDot} />
+          <View style={styles.settingsDot} />
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+
+  /**
+   * Renders empty state when no trainings are available
+   */
+  const renderEmptyState = () => (
+    <View style={styles.emptyContainer}>
+      <Text style={styles.emptyText}>{translate('noCustomTrainings')}</Text>
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>{translate('appName')}</Text>
-        <TouchableOpacity
-          style={styles.settingsButton}
-          onPress={() => setShowDropdown(!showDropdown)}
-          accessibilityLabel="Settings"
-          accessibilityRole="button"
-        >
-          <Text style={styles.settingsIcon}>⚙️</Text>
-        </TouchableOpacity>
-        {showDropdown && (
-          <SettingsDropdown
-            onClose={() => setShowDropdown(false)}
-            onNavigate={handleNavigate}
-          />
-        )}
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+
+      {renderHeader()}
+
+      <View style={styles.content}>
+        <FlatList
+          data={allTrainings}
+          renderItem={renderTrainingItem}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={renderEmptyState}
+        />
       </View>
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
-        {allTrainings.map((training) => (
-          <TrainingCard
-            key={training.id}
-            training={training}
-            onPress={() => navigation.navigate('TrainingList', { trainingId: training.id })}
-          />
-        ))}
-      </ScrollView>
+
+      {/* Dropdown Menu Modal */}
+      <Modal
+        visible={isDropdownVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={closeDropdown}
+      >
+        <TouchableWithoutFeedback onPress={closeDropdown}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              <View>
+                <SettingsDropdown
+                  onClose={closeDropdown}
+                  onNavigate={handleNavigate}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -76,25 +159,58 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: spacing.lg,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
     backgroundColor: colors.surface,
-    ...shadows.small,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
   },
-  title: {
-    fontSize: fontSize.xxl,
+  headerTitle: {
+    fontSize: fontSize.xxxl,
     fontWeight: 'bold',
     color: colors.primary,
   },
   settingsButton: {
     padding: spacing.sm,
+    borderRadius: borderRadius.sm,
+    backgroundColor: colors.background,
   },
   settingsIcon: {
-    fontSize: fontSize.xxl,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 24,
+    height: 24,
   },
-  scrollView: {
-    flex: 1,
+  settingsDot: {
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
+    backgroundColor: colors.primary,
+    marginVertical: 2,
   },
   content: {
+    flex: 1,
+  },
+  listContent: {
     padding: spacing.lg,
+    paddingBottom: spacing.xxl,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: spacing.xxl * 2,
+  },
+  emptyText: {
+    fontSize: fontSize.lg,
+    color: colors.text.secondary,
+    textAlign: 'center',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
 });
+
+export default MainScreen;

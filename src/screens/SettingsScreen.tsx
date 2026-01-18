@@ -10,10 +10,13 @@ import {
   Switch,
   Alert,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useLanguage } from '../context/LanguageContext';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
+import { useNetworkStatus } from '../hooks/useNetworkStatus';
 import { UserSettings } from '../types';
 import DaySelector from '../components/DaySelector';
 import { colors, spacing, fontSize, borderRadius, shadows } from '../utils/theme';
@@ -21,7 +24,9 @@ import { validation } from '../utils/validation';
 
 export default function SettingsScreen() {
   const { translate, language, setLanguage } = useLanguage();
-  const { settings, updateSettings } = useApp();
+  const { settings, updateSettings, isSyncing, lastSyncedAt, syncFromCloud, syncError } = useApp();
+  const { user, loginWithGoogle, logout, loading: authLoading, error: authError } = useAuth();
+  const { isConnected } = useNetworkStatus();
   const [localSettings, setLocalSettings] = useState<UserSettings | null>(settings);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
@@ -76,6 +81,62 @@ export default function SettingsScreen() {
     if (localSettings) {
       setLocalSettings({ ...localSettings, [key]: value });
     }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await loginWithGoogle();
+    } catch (error: any) {
+      Alert.alert(translate('error'), error.message || 'Failed to sign in');
+    }
+  };
+
+  const handleLogout = async () => {
+    Alert.alert(
+      translate('signOut'),
+      'Are you sure you want to sign out?',
+      [
+        { text: translate('cancel'), style: 'cancel' },
+        {
+          text: translate('signOut'),
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await logout();
+            } catch (error: any) {
+              Alert.alert(translate('error'), error.message || 'Failed to sign out');
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const handleSyncNow = async () => {
+    try {
+      await syncFromCloud();
+      Alert.alert(translate('success'), translate('dataSynced'));
+    } catch (error: any) {
+      Alert.alert(translate('error'), error.message || translate('syncFailed'));
+    }
+  };
+
+  const formatTimeSinceSync = (lastSyncedAt: string | null): string => {
+    if (!lastSyncedAt) return translate('notSignedIn');
+
+    const now = new Date();
+    const synced = new Date(lastSyncedAt);
+    const diffMs = now.getTime() - synced.getTime();
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffSeconds < 10) return translate('justNow');
+    if (diffSeconds < 60) return `${diffSeconds} ${translate('secondsAgo')}`;
+    if (diffMinutes < 60) return `${diffMinutes} ${translate('minutesAgo')}`;
+    if (diffHours < 24) return `${diffHours} ${translate('hoursAgo')}`;
+    return `${diffDays} ${translate('daysAgo')}`;
   };
 
   const languages = [
@@ -354,16 +415,86 @@ export default function SettingsScreen() {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>{translate('sync')}</Text>
-          <TouchableOpacity
-            style={styles.syncButton}
-            accessibilityLabel={translate('sync')}
-            accessibilityRole="button"
-          >
-            <Text style={styles.syncButtonText}>
-              {translate('syncWithGoogle')} / {translate('syncWithApple')}
-            </Text>
-          </TouchableOpacity>
-          <Text style={styles.noteText}>Sync functionality coming soon</Text>
+
+          {/* Network Status */}
+          {isConnected === false && (
+            <View style={styles.statusBanner}>
+              <Text style={styles.offlineText}>{translate('offline')}</Text>
+            </View>
+          )}
+
+          {!user ? (
+            // Not signed in - show sign in button
+            <>
+              <TouchableOpacity
+                style={styles.googleButton}
+                onPress={handleGoogleSignIn}
+                disabled={authLoading}
+                accessibilityLabel={translate('signInWithGoogle')}
+                accessibilityRole="button"
+              >
+                {authLoading ? (
+                  <ActivityIndicator size="small" color={colors.surface} />
+                ) : (
+                  <Text style={styles.googleButtonText}>{translate('signInWithGoogle')}</Text>
+                )}
+              </TouchableOpacity>
+              {authError && <Text style={styles.errorText}>{authError}</Text>}
+            </>
+          ) : (
+            // Signed in - show user info and sync controls
+            <>
+              <View style={styles.userInfoContainer}>
+                <Text style={styles.userEmail}>
+                  {translate('signedInAs')}: {user.email}
+                </Text>
+              </View>
+
+              {/* Sync Status */}
+              <View style={styles.syncStatusContainer}>
+                {isSyncing ? (
+                  <View style={styles.syncingRow}>
+                    <ActivityIndicator size="small" color={colors.primary} />
+                    <Text style={styles.syncingText}>{translate('syncInProgress')}</Text>
+                  </View>
+                ) : syncError ? (
+                  <Text style={styles.errorText}>
+                    {translate('syncFailed')}: {syncError}
+                  </Text>
+                ) : (
+                  <Text style={styles.syncedText}>
+                    {translate('lastSynced')}: {formatTimeSinceSync(lastSyncedAt)}
+                  </Text>
+                )}
+              </View>
+
+              {/* Sync Now Button */}
+              <TouchableOpacity
+                style={styles.syncNowButton}
+                onPress={handleSyncNow}
+                disabled={isSyncing || !isConnected}
+                accessibilityLabel={translate('syncNow')}
+                accessibilityRole="button"
+              >
+                <Text style={styles.syncNowButtonText}>{translate('syncNow')}</Text>
+              </TouchableOpacity>
+
+              {/* Logout Button */}
+              <TouchableOpacity
+                style={styles.logoutButton}
+                onPress={handleLogout}
+                disabled={authLoading}
+                accessibilityLabel={translate('signOut')}
+                accessibilityRole="button"
+              >
+                {authLoading ? (
+                  <ActivityIndicator size="small" color={colors.error} />
+                ) : (
+                  <Text style={styles.logoutButtonText}>{translate('signOut')}</Text>
+                )}
+              </TouchableOpacity>
+            </>
+          )}
         </View>
 
         <TouchableOpacity
@@ -519,6 +650,86 @@ const styles = StyleSheet.create({
   saveButtonText: {
     color: colors.text.inverse,
     fontSize: fontSize.lg,
+    fontWeight: 'bold',
+  },
+  statusBanner: {
+    backgroundColor: colors.warning || '#FFA500',
+    borderRadius: borderRadius.sm,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+    alignItems: 'center',
+  },
+  offlineText: {
+    color: colors.text.inverse,
+    fontSize: fontSize.md,
+    fontWeight: 'bold',
+  },
+  googleButton: {
+    backgroundColor: '#4285F4',
+    borderRadius: borderRadius.sm,
+    padding: spacing.lg,
+    alignItems: 'center',
+    marginBottom: spacing.md,
+  },
+  googleButtonText: {
+    color: colors.text.inverse,
+    fontSize: fontSize.md,
+    fontWeight: 'bold',
+  },
+  userInfoContainer: {
+    backgroundColor: colors.inputBackground,
+    borderRadius: borderRadius.sm,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+  },
+  userEmail: {
+    fontSize: fontSize.md,
+    color: colors.text.primary,
+  },
+  syncStatusContainer: {
+    marginBottom: spacing.md,
+  },
+  syncingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
+  syncingText: {
+    fontSize: fontSize.md,
+    color: colors.text.secondary,
+    marginLeft: spacing.sm,
+  },
+  syncedText: {
+    fontSize: fontSize.sm,
+    color: colors.text.secondary,
+  },
+  errorText: {
+    fontSize: fontSize.sm,
+    color: colors.error,
+  },
+  syncNowButton: {
+    backgroundColor: colors.primary,
+    borderRadius: borderRadius.sm,
+    padding: spacing.md,
+    alignItems: 'center',
+    marginBottom: spacing.md,
+  },
+  syncNowButtonText: {
+    color: colors.text.inverse,
+    fontSize: fontSize.md,
+    fontWeight: 'bold',
+  },
+  logoutButton: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: colors.error,
+    borderRadius: borderRadius.sm,
+    padding: spacing.md,
+    alignItems: 'center',
+  },
+  logoutButtonText: {
+    color: colors.error,
+    fontSize: fontSize.md,
     fontWeight: 'bold',
   },
 });

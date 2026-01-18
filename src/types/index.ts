@@ -2,7 +2,9 @@ export interface Exercise {
   id: string;
   name: string;
   description: string;
+  startingPosition?: string;
   animationUrl?: string;
+  imageUrl?: string;
   defaultDuration: number; // in seconds
 }
 
@@ -28,6 +30,8 @@ export interface UserSettings {
   ttsEnabled: boolean;
   pauseBetweenExercises: number; // in seconds
   isSynced: boolean;
+  lastSyncedAt?: string; // ISO timestamp
+  cloudSyncEnabled: boolean; // true after login
 }
 
 export interface TrainingHistory {

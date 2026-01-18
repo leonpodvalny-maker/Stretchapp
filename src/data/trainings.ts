@@ -10,12 +10,14 @@ export const defaultTrainings: Training[] = [
         id: '1-1',
         name: 'Neck Stretch',
         description: 'Gently tilt your head to the right, hold for 30 seconds, then repeat on the left side.',
+        startingPosition: 'Stand or sit with your back straight and shoulders relaxed.',
         defaultDuration: 30,
       },
       {
         id: '1-2',
         name: 'Shoulder Roll',
         description: 'Roll your shoulders backward in a circular motion 10 times, then forward 10 times.',
+        startingPosition: 'Stand with feet shoulder-width apart, arms relaxed at your sides.',
         defaultDuration: 30,
       },
       {
@@ -41,6 +43,7 @@ export const defaultTrainings: Training[] = [
         id: '2-1',
         name: 'Cat-Cow Stretch',
         description: 'Start on hands and knees, arch your back up (cat), then drop it down (cow).',
+        startingPosition: 'Begin on all fours with hands directly under shoulders and knees under hips.',
         defaultDuration: 30,
       },
       {
@@ -78,7 +81,8 @@ export const defaultTrainings: Training[] = [
         id: '3-1',
         name: 'Child\'s Pose',
         description: 'Kneel on the floor, sit back on your heels, and reach your arms forward.',
-        defaultDuration: 30,
+        startingPosition: 'Start in a kneeling position on a mat or soft surface.',
+        defaultDuration: 90,
       },
       {
         id: '3-2',
