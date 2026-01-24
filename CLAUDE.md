@@ -71,6 +71,8 @@ npm run web        # Start web version
 - **React Navigation** - Screen navigation
 - **React Context** - State management
 - **AsyncStorage** - Local data persistence
+- **Firebase** - Authentication and cloud sync (Firestore)
+- **Google Sign-In** - OAuth authentication via Firebase
 
 ### Project Structure
 ```
@@ -113,7 +115,48 @@ src/
 7. **Exercise Details** - Animation, description, and time selector
 
 ### Data Flow
-- Settings and user data stored in AsyncStorage
+- Settings and user data stored in AsyncStorage (local)
+- Firebase Firestore used for cloud backup and sync
+- Google Sign-In authentication via Firebase Auth
 - Context providers manage global state
 - Navigation handled by React Navigation stack
 - Language/i18n managed by LanguageContext
+
+## Firebase Integration
+
+### Setup
+The app uses Firebase for:
+- **Authentication** - Google Sign-In (OAuth)
+- **Cloud Storage** - Firestore for syncing user data (settings, trainings, history)
+- **Offline Support** - Firestore offline persistence enabled
+
+### Configuration Files
+- `google-services.json` - Android Google Services configuration (Firebase/Google Sign-In)
+- `src/services/firebase.ts` - Firebase initialization and configuration
+
+### Platform-Specific Persistence
+Firebase Auth uses different persistence mechanisms per platform:
+- **Web**: `indexedDBLocalPersistence` (browser IndexedDB)
+- **React Native** (iOS/Android): `getReactNativePersistence` with AsyncStorage
+
+### Cloud Sync Features
+- Manual sync button in Settings screen
+- Automatic sync on Google Sign-In
+- Data synced: settings, custom trainings, training history
+- Offline-first: works without internet, syncs when online
+
+## Recent Changes (2026-01-24)
+
+### Dependencies Fixed
+- Updated `@react-native-community/netinfo` to version 9.3.10 (Expo SDK 49 compatible)
+- Run `npx expo install --fix` if dependency warnings appear
+
+### Firebase Web Compatibility
+- Fixed Firebase Auth persistence for web platform
+- Web builds now use `indexedDBLocalPersistence` instead of React Native-specific persistence
+- Eliminates webpack compilation warnings on web
+
+### Development Notes
+- Web version runs on http://localhost:19006 (Webpack)
+- Metro bundler runs on http://localhost:8081 or http://localhost:8083
+- Use `npm start` then press `w` for web, `a` for Android, `i` for iOS

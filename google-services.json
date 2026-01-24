@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "270934121081",
+    "project_id": "stretchapp-cf32c",
+    "storage_bucket": "stretchapp-cf32c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270934121081:android:9cdf2e30f4896d918e92a8",
+        "android_client_info": {
+          "package_name": "com.stretch.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXUE9wBV3cvZf2Ft1IlHA3gBLfOjCuan8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
