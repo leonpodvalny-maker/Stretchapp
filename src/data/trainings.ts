@@ -3,8 +3,10 @@ import { Training } from '../types';
 export const defaultTrainings: Training[] = [
   {
     id: '1',
-    name: 'Morning Stretch',
-    description: 'Perfect way to start your day with gentle stretches',
+    nameKey: 'training1Name',
+    descriptionKey: 'training1Description',
+    name: 'Therapeutic Exercise for Spinal Osteochondrosis, Radiculitis, Hernias',
+    description: 'Therapeutic exercise for spinal osteochondrosis, radiculitis, hernias',
     exercises: [
       {
         id: '1-1',
@@ -36,8 +38,10 @@ export const defaultTrainings: Training[] = [
   },
   {
     id: '2',
-    name: 'Full Body Flexibility',
-    description: 'Comprehensive stretching routine for entire body',
+    nameKey: 'training2Name',
+    descriptionKey: 'training2Description',
+    name: 'Therapeutic Exercise for Cervical Osteochondrosis',
+    description: 'Therapeutic exercise for cervical osteochondrosis',
     exercises: [
       {
         id: '2-1',
@@ -74,6 +78,8 @@ export const defaultTrainings: Training[] = [
   },
   {
     id: '3',
+    nameKey: 'training3Name',
+    descriptionKey: 'training3Description',
     name: 'Evening Relaxation',
     description: 'Gentle stretches to unwind before bed',
     exercises: [

@@ -11,7 +11,9 @@ export interface Exercise {
 export interface Training {
   id: string;
   name: string;
+  nameKey?: string; // i18n translation key
   description?: string;
+  descriptionKey?: string; // i18n translation key
   exercises: Exercise[];
   icon?: string;
 }

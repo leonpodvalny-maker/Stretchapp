@@ -120,10 +120,13 @@ export default function WorkoutSessionScreen() {
   const handleWorkoutComplete = async () => {
     if (!training) return;
 
+    // Use translation key if available, otherwise use hardcoded name
+    const displayName = training.nameKey ? translate(training.nameKey) : training.name;
+
     const history: TrainingHistory = {
       id: Date.now().toString(),
       trainingId: training.id,
-      trainingName: training.name,
+      trainingName: displayName,
       date: new Date().toISOString().split('T')[0],
       exercises: [
         ...completedExercises,
@@ -139,7 +142,7 @@ export default function WorkoutSessionScreen() {
       await addTrainingHistory(history);
       Alert.alert(
         translate('workoutComplete'),
-        translate('workoutCompleteMessage').replace('{name}', training.name),
+        translate('workoutCompleteMessage').replace('{name}', displayName),
         [
           {
             text: 'OK',
@@ -186,10 +189,13 @@ export default function WorkoutSessionScreen() {
     return null;
   }
 
+  // Use translation key if available, otherwise use hardcoded name
+  const displayName = training.nameKey ? translate(training.nameKey) : training.name;
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.trainingName}>{training.name}</Text>
+        <Text style={styles.trainingName}>{displayName}</Text>
         <Text style={styles.progress}>
           {translate('exercise')} {currentExerciseIndex + 1} / {training.exercises.length}
         </Text>

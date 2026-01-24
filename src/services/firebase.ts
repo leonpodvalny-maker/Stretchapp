@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, initializeAuth, indexedDBLocalPersistence } from 'firebase/auth';
-import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 import { Platform } from 'react-native';
 
 // Firebase configuration
@@ -18,30 +18,11 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Auth with platform-specific persistence
-let auth;
-if (Platform.OS === 'web') {
-  // For web, use indexedDBLocalPersistence (browser default)
-  auth = initializeAuth(app, {
-    persistence: indexedDBLocalPersistence
-  });
-} else {
-  // For React Native, use AsyncStorage persistence
-  // Note: getReactNativePersistence is only available on React Native
-  const AsyncStorage = require('@react-native-async-storage/async-storage').default;
-  // @ts-ignore - This import only works on React Native
-  const { getReactNativePersistence } = require('firebase/auth');
-  auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage)
-  });
-}
+// Initialize Firebase Auth (uses browser persistence automatically on web)
+const auth = getAuth(app);
 
-// Initialize Firestore with offline persistence
-const firestore = initializeFirestore(app, {
-  localCache: persistentLocalCache({
-    tabManager: persistentMultipleTabManager()
-  })
-});
+// Initialize Firestore (uses default persistence on web)
+const firestore = getFirestore(app);
 
 export { auth, firestore };
 export default app;

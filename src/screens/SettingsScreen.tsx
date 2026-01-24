@@ -121,6 +121,13 @@ export default function SettingsScreen() {
     }
   };
 
+  // Format date from YYYY-MM-DD to DD/MM/YYYY
+  const formatDateDisplay = (dateString: string | null): string => {
+    if (!dateString) return 'Select date';
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
+  };
+
   const formatTimeSinceSync = (lastSyncedAt: string | null): string => {
     if (!lastSyncedAt) return translate('notSignedIn');
 
@@ -205,32 +212,65 @@ export default function SettingsScreen() {
               accessibilityRole="button"
             >
               <Text style={styles.dateText}>
-                {localSettings.dateOfBirth || 'Select date'}
+                {formatDateDisplay(localSettings.dateOfBirth)}
               </Text>
             </TouchableOpacity>
-            {showDatePicker && (
-              <DateTimePicker
-                value={localSettings.dateOfBirth ? new Date(localSettings.dateOfBirth) : new Date()}
-                mode="date"
-                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                onChange={(event, date) => {
-                  setShowDatePicker(Platform.OS === 'ios');
-                  if (date) {
-                    updateLocalSetting('dateOfBirth', date.toISOString().split('T')[0]);
-                  }
-                  if (event.type === 'dismissed') {
-                    setShowDatePicker(false);
-                  }
-                }}
-              />
-            )}
-            {showDatePicker && Platform.OS === 'ios' && (
-              <TouchableOpacity
-                style={styles.doneButton}
-                onPress={() => setShowDatePicker(false)}
-              >
-                <Text style={styles.doneButtonText}>Done</Text>
-              </TouchableOpacity>
+            {Platform.OS === 'web' ? (
+              showDatePicker && (
+                <View style={styles.webDatePickerContainer}>
+                  <input
+                    type="date"
+                    value={localSettings.dateOfBirth || ''}
+                    onChange={(e: any) => {
+                      updateLocalSetting('dateOfBirth', e.target.value);
+                      setShowDatePicker(false);
+                    }}
+                    max={new Date().toISOString().split('T')[0]}
+                    min="1900-01-01"
+                    onBlur={() => setShowDatePicker(false)}
+                    autoFocus
+                    style={{
+                      backgroundColor: colors.inputBackground,
+                      borderRadius: borderRadius.sm,
+                      padding: spacing.md,
+                      fontSize: fontSize.md,
+                      color: colors.text.primary,
+                      border: 'none',
+                      width: '100%',
+                      marginTop: spacing.sm,
+                    }}
+                  />
+                </View>
+              )
+            ) : (
+              <>
+                {showDatePicker && (
+                  <DateTimePicker
+                    value={localSettings.dateOfBirth ? new Date(localSettings.dateOfBirth) : new Date(2000, 0, 1)}
+                    mode="date"
+                    display={Platform.OS === 'ios' ? 'inline' : 'default'}
+                    maximumDate={new Date()}
+                    minimumDate={new Date(1900, 0, 1)}
+                    onChange={(event, date) => {
+                      setShowDatePicker(Platform.OS === 'ios');
+                      if (date) {
+                        updateLocalSetting('dateOfBirth', date.toISOString().split('T')[0]);
+                      }
+                      if (event.type === 'dismissed') {
+                        setShowDatePicker(false);
+                      }
+                    }}
+                  />
+                )}
+                {showDatePicker && Platform.OS === 'ios' && (
+                  <TouchableOpacity
+                    style={styles.doneButton}
+                    onPress={() => setShowDatePicker(false)}
+                  >
+                    <Text style={styles.doneButtonText}>Done</Text>
+                  </TouchableOpacity>
+                )}
+              </>
             )}
           </View>
         </View>
@@ -564,6 +604,9 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: fontSize.md,
     color: colors.text.primary,
+  },
+  webDatePickerContainer: {
+    marginTop: spacing.sm,
   },
   doneButton: {
     backgroundColor: colors.primary,

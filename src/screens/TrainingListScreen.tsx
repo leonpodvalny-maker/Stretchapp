@@ -45,11 +45,15 @@ export default function TrainingListScreen() {
     });
   };
 
+  // Use translation key if available, otherwise use hardcoded name
+  const displayName = training.nameKey ? translate(training.nameKey) : training.name;
+  const displayDescription = training.descriptionKey ? translate(training.descriptionKey) : training.description;
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>{training.name}</Text>
-        <Text style={styles.description}>{training.description}</Text>
+        <Text style={styles.title}>{displayName}</Text>
+        <Text style={styles.description}>{displayDescription}</Text>
         <TouchableOpacity style={styles.startButton} onPress={handleStartTraining}>
           <Text style={styles.startButtonText}>{translate('startTraining')}</Text>
         </TouchableOpacity>

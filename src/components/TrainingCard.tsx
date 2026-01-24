@@ -12,17 +12,21 @@ interface TrainingCardProps {
 const TrainingCard = memo(({ training, onPress }: TrainingCardProps) => {
   const { translate } = useLanguage();
 
+  // Use translation key if available, otherwise use hardcoded name
+  const displayName = training.nameKey ? translate(training.nameKey) : training.name;
+  const displayDescription = training.descriptionKey ? translate(training.descriptionKey) : training.description;
+
   return (
     <TouchableOpacity
       style={styles.card}
       onPress={onPress}
-      accessibilityLabel={training.name}
+      accessibilityLabel={displayName}
       accessibilityHint={`View ${training.exercises.length} exercises`}
       accessibilityRole="button"
     >
       <View style={styles.content}>
-        <Text style={styles.name}>{training.name}</Text>
-        <Text style={styles.description}>{training.description}</Text>
+        <Text style={styles.name}>{displayName}</Text>
+        <Text style={styles.description}>{displayDescription}</Text>
         <Text style={styles.exerciseCount}>
           {training.exercises.length} {training.exercises.length === 1 ? translate('exercise') : translate('exercisesPlural')}
         </Text>
