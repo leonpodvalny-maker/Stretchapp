@@ -40,6 +40,8 @@ export const translations: Record<string, Record<string, string>> = {
     reminderEnabled: 'Enable Reminder',
     selectDays: 'Select Days',
     selectTime: 'Select Time',
+    differentTimePerDay: 'Different Time Per Day',
+    timePerDay: 'Time Per Day',
     ttsOptions: 'TTS Options',
     ttsEnabled: 'Enable Text-to-Speech',
     trainingOptions: 'Training Options',
@@ -96,9 +98,16 @@ export const translations: Record<string, Record<string, string>> = {
     success: 'Success',
     loading: 'Loading...',
     trainingNotFound: 'Training not found',
+    exerciseNotFound: 'Exercise not found',
     failedToSaveHistory: 'Failed to save training history',
     settingsSaved: 'Settings saved successfully',
-    
+    enterTrainingName: 'Please enter a training name',
+    selectAtLeastOneExercise: 'Please select at least one exercise',
+    customTrainingWith: 'Custom training with',
+    customTrainingCreated: 'Custom training created!',
+    deleteTraining: 'Delete Training',
+    areYouSure: 'Are you sure?',
+
     // Calendar
     noTrainings: 'No trainings completed',
     
@@ -124,6 +133,54 @@ export const translations: Record<string, Record<string, string>> = {
     friday: 'Friday',
     saturday: 'Saturday',
     sunday: 'Sunday',
+
+    // Exercise Names - Training 1
+    exercise1_1Name: 'Neck Stretch',
+    exercise1_2Name: 'Shoulder Roll',
+    exercise1_3Name: 'Arm Circles',
+    exercise1_4Name: 'Forward Fold',
+
+    // Exercise Descriptions - Training 1
+    exercise1_1Description: 'Gently tilt your head to the right, hold for 30 seconds, then repeat on the left side.',
+    exercise1_2Description: 'Roll your shoulders backward in a circular motion 10 times, then forward 10 times.',
+    exercise1_3Description: 'Extend your arms to the sides and make small circles, gradually increasing the size.',
+    exercise1_4Description: 'Stand with feet hip-width apart, slowly bend forward and reach toward your toes.',
+
+    // Exercise Starting Positions - Training 1
+    exercise1_1StartingPosition: 'Stand or sit with your back straight and shoulders relaxed.',
+    exercise1_2StartingPosition: 'Stand with feet shoulder-width apart, arms relaxed at your sides.',
+
+    // Exercise Names - Training 2
+    exercise2_1Name: 'Cat-Cow Stretch',
+    exercise2_2Name: 'Hip Flexor Stretch',
+    exercise2_3Name: 'Hamstring Stretch',
+    exercise2_4Name: 'Quad Stretch',
+    exercise2_5Name: 'Spinal Twist',
+
+    // Exercise Descriptions - Training 2
+    exercise2_1Description: 'Start on hands and knees, arch your back up (cat), then drop it down (cow).',
+    exercise2_2Description: 'Step forward into a lunge position, keeping your back leg straight.',
+    exercise2_3Description: 'Sit on the floor with one leg extended, reach forward toward your toes.',
+    exercise2_4Description: 'Stand and pull your heel toward your glutes, holding your ankle.',
+    exercise2_5Description: 'Sit with legs extended, cross one leg over the other and twist your torso.',
+
+    // Exercise Starting Positions - Training 2
+    exercise2_1StartingPosition: 'Begin on all fours with hands directly under shoulders and knees under hips.',
+
+    // Exercise Names - Training 3
+    exercise3_1Name: 'Child\'s Pose',
+    exercise3_2Name: 'Seated Forward Bend',
+    exercise3_3Name: 'Supine Twist',
+    exercise3_4Name: 'Legs Up the Wall',
+
+    // Exercise Descriptions - Training 3
+    exercise3_1Description: 'Kneel on the floor, sit back on your heels, and reach your arms forward.',
+    exercise3_2Description: 'Sit with legs extended, slowly reach forward and hold your feet or ankles.',
+    exercise3_3Description: 'Lie on your back, bring knees to chest, then drop them to one side.',
+    exercise3_4Description: 'Lie on your back and rest your legs vertically against a wall.',
+
+    // Exercise Starting Positions - Training 3
+    exercise3_1StartingPosition: 'Start in a kneeling position on a mat or soft surface.',
   },
   es: {
     selectLanguage: 'Seleccionar Idioma',
@@ -150,6 +207,8 @@ export const translations: Record<string, Record<string, string>> = {
     reminderEnabled: 'Activar Recordatorio',
     selectDays: 'Seleccionar Días',
     selectTime: 'Seleccionar Hora',
+    differentTimePerDay: 'Hora Diferente por Día',
+    timePerDay: 'Hora por Día',
     ttsOptions: 'Opciones de TTS',
     ttsEnabled: 'Activar Texto a Voz',
     trainingOptions: 'Opciones de Entrenamiento',
@@ -202,8 +261,15 @@ export const translations: Record<string, Record<string, string>> = {
     success: 'Éxito',
     loading: 'Cargando...',
     trainingNotFound: 'Entrenamiento no encontrado',
+    exerciseNotFound: 'Ejercicio no encontrado',
     failedToSaveHistory: 'Error al guardar el historial de entrenamiento',
     settingsSaved: 'Configuración guardada correctamente',
+    enterTrainingName: 'Por favor ingresa un nombre de entrenamiento',
+    selectAtLeastOneExercise: 'Por favor selecciona al menos un ejercicio',
+    customTrainingWith: 'Entrenamiento personalizado con',
+    customTrainingCreated: '¡Entrenamiento personalizado creado!',
+    deleteTraining: 'Eliminar Entrenamiento',
+    areYouSure: '¿Estás seguro?',
     noTrainings: 'No se han completado entrenamientos',
     createCustomTraining: 'Crear Entrenamiento Personalizado',
     trainingName: 'Nombre del Entrenamiento',
@@ -224,6 +290,54 @@ export const translations: Record<string, Record<string, string>> = {
     friday: 'Viernes',
     saturday: 'Sábado',
     sunday: 'Domingo',
+
+    // Exercise Names - Training 1
+    exercise1_1Name: 'Estiramiento de Cuello',
+    exercise1_2Name: 'Rotación de Hombros',
+    exercise1_3Name: 'Círculos con los Brazos',
+    exercise1_4Name: 'Flexión Hacia Adelante',
+
+    // Exercise Descriptions - Training 1
+    exercise1_1Description: 'Inclina suavemente la cabeza hacia la derecha, mantén durante 30 segundos, luego repite del lado izquierdo.',
+    exercise1_2Description: 'Gira los hombros hacia atrás en movimiento circular 10 veces, luego hacia adelante 10 veces.',
+    exercise1_3Description: 'Extiende los brazos a los lados y haz círculos pequeños, aumentando gradualmente el tamaño.',
+    exercise1_4Description: 'Párate con los pies separados al ancho de las caderas, inclínate lentamente hacia adelante y alcanza los dedos de los pies.',
+
+    // Exercise Starting Positions - Training 1
+    exercise1_1StartingPosition: 'Párate o siéntate con la espalda recta y los hombros relajados.',
+    exercise1_2StartingPosition: 'Párate con los pies separados al ancho de los hombros, brazos relajados a los lados.',
+
+    // Exercise Names - Training 2
+    exercise2_1Name: 'Estiramiento Gato-Vaca',
+    exercise2_2Name: 'Estiramiento de Flexores de Cadera',
+    exercise2_3Name: 'Estiramiento de Isquiotibiales',
+    exercise2_4Name: 'Estiramiento de Cuádriceps',
+    exercise2_5Name: 'Torsión Espinal',
+
+    // Exercise Descriptions - Training 2
+    exercise2_1Description: 'Comienza en cuatro patas, arquea la espalda hacia arriba (gato), luego bájala (vaca).',
+    exercise2_2Description: 'Da un paso hacia adelante en posición de estocada, manteniendo la pierna trasera recta.',
+    exercise2_3Description: 'Siéntate en el suelo con una pierna extendida, alcanza hacia adelante hacia los dedos de los pies.',
+    exercise2_4Description: 'Párate y tira el talón hacia los glúteos, sosteniendo el tobillo.',
+    exercise2_5Description: 'Siéntate con las piernas extendidas, cruza una pierna sobre la otra y gira el torso.',
+
+    // Exercise Starting Positions - Training 2
+    exercise2_1StartingPosition: 'Comienza en cuatro patas con las manos directamente debajo de los hombros y las rodillas debajo de las caderas.',
+
+    // Exercise Names - Training 3
+    exercise3_1Name: 'Postura del Niño',
+    exercise3_2Name: 'Flexión Sentada Hacia Adelante',
+    exercise3_3Name: 'Torsión Supina',
+    exercise3_4Name: 'Piernas Arriba en la Pared',
+
+    // Exercise Descriptions - Training 3
+    exercise3_1Description: 'Arrodíllate en el suelo, siéntate sobre los talones y extiende los brazos hacia adelante.',
+    exercise3_2Description: 'Siéntate con las piernas extendidas, alcanza lentamente hacia adelante y sostén los pies o tobillos.',
+    exercise3_3Description: 'Acuéstate boca arriba, lleva las rodillas al pecho, luego déjalas caer hacia un lado.',
+    exercise3_4Description: 'Acuéstate boca arriba y apoya las piernas verticalmente contra una pared.',
+
+    // Exercise Starting Positions - Training 3
+    exercise3_1StartingPosition: 'Comienza en posición de rodillas sobre una colchoneta o superficie suave.',
   },
   fr: {
     selectLanguage: 'Sélectionner la Langue',
@@ -257,6 +371,8 @@ export const translations: Record<string, Record<string, string>> = {
     reminderEnabled: 'Activer le Rappel',
     selectDays: 'Sélectionner les Jours',
     selectTime: 'Sélectionner l\'Heure',
+    differentTimePerDay: 'Heure Différente par Jour',
+    timePerDay: 'Heure par Jour',
     ttsOptions: 'Options TTS',
     ttsEnabled: 'Activer la Synthèse Vocale',
     trainingOptions: 'Options d\'Entraînement',
@@ -309,8 +425,15 @@ export const translations: Record<string, Record<string, string>> = {
     success: 'Succès',
     loading: 'Chargement...',
     trainingNotFound: 'Entraînement non trouvé',
+    exerciseNotFound: 'Exercice non trouvé',
     failedToSaveHistory: 'Échec de l\'enregistrement de l\'historique',
     settingsSaved: 'Paramètres enregistrés avec succès',
+    enterTrainingName: 'Veuillez entrer un nom d\'entraînement',
+    selectAtLeastOneExercise: 'Veuillez sélectionner au moins un exercice',
+    customTrainingWith: 'Entraînement personnalisé avec',
+    customTrainingCreated: 'Entraînement personnalisé créé!',
+    deleteTraining: 'Supprimer l\'Entraînement',
+    areYouSure: 'Êtes-vous sûr?',
     noTrainings: 'Aucun entraînement terminé',
     createCustomTraining: 'Créer un Entraînement Personnalisé',
     trainingName: 'Nom de l\'Entraînement',
@@ -331,6 +454,54 @@ export const translations: Record<string, Record<string, string>> = {
     friday: 'Vendredi',
     saturday: 'Samedi',
     sunday: 'Dimanche',
+
+    // Exercise Names - Training 1
+    exercise1_1Name: 'Étirement du Cou',
+    exercise1_2Name: 'Rotation des Épaules',
+    exercise1_3Name: 'Cercles avec les Bras',
+    exercise1_4Name: 'Flexion Avant',
+
+    // Exercise Descriptions - Training 1
+    exercise1_1Description: 'Inclinez doucement votre tête vers la droite, maintenez pendant 30 secondes, puis répétez du côté gauche.',
+    exercise1_2Description: 'Roulez vos épaules vers l\'arrière en mouvement circulaire 10 fois, puis vers l\'avant 10 fois.',
+    exercise1_3Description: 'Étendez vos bras sur les côtés et faites de petits cercles, en augmentant progressivement la taille.',
+    exercise1_4Description: 'Tenez-vous debout avec les pieds écartés de la largeur des hanches, penchez-vous lentement vers l\'avant et tendez vers vos orteils.',
+
+    // Exercise Starting Positions - Training 1
+    exercise1_1StartingPosition: 'Tenez-vous debout ou asseyez-vous avec le dos droit et les épaules détendues.',
+    exercise1_2StartingPosition: 'Tenez-vous debout avec les pieds écartés de la largeur des épaules, les bras détendus sur les côtés.',
+
+    // Exercise Names - Training 2
+    exercise2_1Name: 'Étirement Chat-Vache',
+    exercise2_2Name: 'Étirement des Fléchisseurs de Hanche',
+    exercise2_3Name: 'Étirement des Ischio-jambiers',
+    exercise2_4Name: 'Étirement des Quadriceps',
+    exercise2_5Name: 'Torsion Vertébrale',
+
+    // Exercise Descriptions - Training 2
+    exercise2_1Description: 'Commencez à quatre pattes, cambrez votre dos vers le haut (chat), puis abaissez-le (vache).',
+    exercise2_2Description: 'Avancez en position de fente, en gardant votre jambe arrière droite.',
+    exercise2_3Description: 'Asseyez-vous sur le sol avec une jambe tendue, tendez vers l\'avant vers vos orteils.',
+    exercise2_4Description: 'Tenez-vous debout et tirez votre talon vers vos fessiers, en tenant votre cheville.',
+    exercise2_5Description: 'Asseyez-vous avec les jambes tendues, croisez une jambe sur l\'autre et tournez votre torse.',
+
+    // Exercise Starting Positions - Training 2
+    exercise2_1StartingPosition: 'Commencez à quatre pattes avec les mains directement sous les épaules et les genoux sous les hanches.',
+
+    // Exercise Names - Training 3
+    exercise3_1Name: 'Posture de l\'Enfant',
+    exercise3_2Name: 'Flexion Avant Assise',
+    exercise3_3Name: 'Torsion en Position Couchée',
+    exercise3_4Name: 'Jambes Contre le Mur',
+
+    // Exercise Descriptions - Training 3
+    exercise3_1Description: 'Agenouillez-vous sur le sol, asseyez-vous sur vos talons et tendez vos bras vers l\'avant.',
+    exercise3_2Description: 'Asseyez-vous avec les jambes tendues, tendez lentement vers l\'avant et tenez vos pieds ou chevilles.',
+    exercise3_3Description: 'Allongez-vous sur le dos, ramenez les genoux à la poitrine, puis laissez-les tomber d\'un côté.',
+    exercise3_4Description: 'Allongez-vous sur le dos et posez vos jambes verticalement contre un mur.',
+
+    // Exercise Starting Positions - Training 3
+    exercise3_1StartingPosition: 'Commencez en position agenouillée sur un tapis ou une surface douce.',
   },
   de: {
     selectLanguage: 'Sprache Auswählen',
@@ -364,6 +535,8 @@ export const translations: Record<string, Record<string, string>> = {
     reminderEnabled: 'Erinnerung Aktivieren',
     selectDays: 'Tage Auswählen',
     selectTime: 'Zeit Auswählen',
+    differentTimePerDay: 'Unterschiedliche Zeit pro Tag',
+    timePerDay: 'Zeit pro Tag',
     ttsOptions: 'TTS-Optionen',
     ttsEnabled: 'Text-zu-Sprache Aktivieren',
     trainingOptions: 'Trainingsoptionen',
@@ -416,8 +589,15 @@ export const translations: Record<string, Record<string, string>> = {
     success: 'Erfolg',
     loading: 'Lädt...',
     trainingNotFound: 'Training nicht gefunden',
+    exerciseNotFound: 'Übung nicht gefunden',
     failedToSaveHistory: 'Fehler beim Speichern der Trainingshistorie',
     settingsSaved: 'Einstellungen erfolgreich gespeichert',
+    enterTrainingName: 'Bitte geben Sie einen Trainingsnamen ein',
+    selectAtLeastOneExercise: 'Bitte wählen Sie mindestens eine Übung aus',
+    customTrainingWith: 'Eigenes Training mit',
+    customTrainingCreated: 'Eigenes Training erstellt!',
+    deleteTraining: 'Training Löschen',
+    areYouSure: 'Sind Sie sicher?',
     noTrainings: 'Keine Trainings abgeschlossen',
     createCustomTraining: 'Eigenes Training Erstellen',
     trainingName: 'Trainingsname',
@@ -438,6 +618,54 @@ export const translations: Record<string, Record<string, string>> = {
     friday: 'Freitag',
     saturday: 'Samstag',
     sunday: 'Sonntag',
+
+    // Exercise Names - Training 1
+    exercise1_1Name: 'Nacken-Dehnung',
+    exercise1_2Name: 'Schulter-Kreisen',
+    exercise1_3Name: 'Arm-Kreise',
+    exercise1_4Name: 'Vorwärtsbeuge',
+
+    // Exercise Descriptions - Training 1
+    exercise1_1Description: 'Neigen Sie Ihren Kopf sanft nach rechts, halten Sie 30 Sekunden, dann wiederholen Sie auf der linken Seite.',
+    exercise1_2Description: 'Kreisen Sie Ihre Schultern 10 Mal rückwärts in kreisenden Bewegungen, dann 10 Mal vorwärts.',
+    exercise1_3Description: 'Strecken Sie Ihre Arme zur Seite und machen Sie kleine Kreise, die Sie allmählich vergrößern.',
+    exercise1_4Description: 'Stehen Sie mit hüftbreit auseinander gestellten Füßen, beugen Sie sich langsam nach vorne und greifen Sie zu Ihren Zehen.',
+
+    // Exercise Starting Positions - Training 1
+    exercise1_1StartingPosition: 'Stehen oder sitzen Sie mit geradem Rücken und entspannten Schultern.',
+    exercise1_2StartingPosition: 'Stehen Sie mit schulterbreit auseinander gestellten Füßen, Arme entspannt an den Seiten.',
+
+    // Exercise Names - Training 2
+    exercise2_1Name: 'Katze-Kuh-Dehnung',
+    exercise2_2Name: 'Hüftbeuger-Dehnung',
+    exercise2_3Name: 'Oberschenkelrückseiten-Dehnung',
+    exercise2_4Name: 'Oberschenkelvorderseiten-Dehnung',
+    exercise2_5Name: 'Wirbelsäulen-Drehung',
+
+    // Exercise Descriptions - Training 2
+    exercise2_1Description: 'Beginnen Sie auf Händen und Knien, wölben Sie Ihren Rücken nach oben (Katze), dann senken Sie ihn ab (Kuh).',
+    exercise2_2Description: 'Machen Sie einen Ausfallschritt nach vorne, halten Sie Ihr hinteres Bein gerade.',
+    exercise2_3Description: 'Sitzen Sie auf dem Boden mit einem ausgestreckten Bein, greifen Sie nach vorne zu Ihren Zehen.',
+    exercise2_4Description: 'Stehen Sie und ziehen Sie Ihre Ferse zu Ihrem Gesäß, halten Sie Ihren Knöchel.',
+    exercise2_5Description: 'Sitzen Sie mit ausgestreckten Beinen, kreuzen Sie ein Bein über das andere und drehen Sie Ihren Oberkörper.',
+
+    // Exercise Starting Positions - Training 2
+    exercise2_1StartingPosition: 'Beginnen Sie auf allen Vieren mit den Händen direkt unter den Schultern und den Knien unter den Hüften.',
+
+    // Exercise Names - Training 3
+    exercise3_1Name: 'Kindshaltung',
+    exercise3_2Name: 'Sitzende Vorwärtsbeuge',
+    exercise3_3Name: 'Rückenlage-Drehung',
+    exercise3_4Name: 'Beine an der Wand',
+
+    // Exercise Descriptions - Training 3
+    exercise3_1Description: 'Knien Sie auf dem Boden, setzen Sie sich auf Ihre Fersen und strecken Sie Ihre Arme nach vorne.',
+    exercise3_2Description: 'Sitzen Sie mit ausgestreckten Beinen, greifen Sie langsam nach vorne und halten Sie Ihre Füße oder Knöchel.',
+    exercise3_3Description: 'Legen Sie sich auf den Rücken, bringen Sie die Knie zur Brust, dann lassen Sie sie zur Seite fallen.',
+    exercise3_4Description: 'Legen Sie sich auf den Rücken und legen Sie Ihre Beine vertikal an eine Wand.',
+
+    // Exercise Starting Positions - Training 3
+    exercise3_1StartingPosition: 'Beginnen Sie in einer knienden Position auf einer Matte oder weichen Unterlage.',
   },
   ru: {
     selectLanguage: 'Выбрать Язык',
@@ -471,6 +699,8 @@ export const translations: Record<string, Record<string, string>> = {
     reminderEnabled: 'Включить Напоминание',
     selectDays: 'Выбрать Дни',
     selectTime: 'Выбрать Время',
+    differentTimePerDay: 'Разное Время для Каждого Дня',
+    timePerDay: 'Время по Дням',
     ttsOptions: 'Параметры TTS',
     ttsEnabled: 'Включить Озвучивание',
     trainingOptions: 'Параметры Тренировки',
@@ -523,8 +753,15 @@ export const translations: Record<string, Record<string, string>> = {
     success: 'Успех',
     loading: 'Загрузка...',
     trainingNotFound: 'Тренировка не найдена',
+    exerciseNotFound: 'Упражнение не найдено',
     failedToSaveHistory: 'Не удалось сохранить историю тренировок',
     settingsSaved: 'Настройки успешно сохранены',
+    enterTrainingName: 'Пожалуйста, введите название тренировки',
+    selectAtLeastOneExercise: 'Пожалуйста, выберите хотя бы одно упражнение',
+    customTrainingWith: 'Своя тренировка с',
+    customTrainingCreated: 'Своя тренировка создана!',
+    deleteTraining: 'Удалить Тренировку',
+    areYouSure: 'Вы уверены?',
     noTrainings: 'Нет завершенных тренировок',
     createCustomTraining: 'Создать Свою Тренировку',
     trainingName: 'Название Тренировки',
@@ -545,6 +782,200 @@ export const translations: Record<string, Record<string, string>> = {
     friday: 'Пятница',
     saturday: 'Суббота',
     sunday: 'Воскресенье',
+
+    // Exercise Names - Training 1
+    exercise1_1Name: 'Растягивание мышц спины',
+    exercise1_2Name: 'Движения пальцами ног',
+    exercise1_3Name: 'Стопы на себя и от себя',
+    exercise1_4Name: 'Стопа наружу поочередно',
+    exercise1_5Name: 'Стопа вовнутрь поочередно',
+    exercise1_6Name: 'Круговые движения в голеностопе',
+    exercise1_7Name: 'Сгибание ног в коленях',
+    exercise1_8Name: 'Подъем прямой ноги',
+    exercise1_9Name: 'Подъем ноги с касанием рукой',
+    exercise1_10Name: 'Подъем таза',
+    exercise1_11Name: 'Отведение ноги в сторону',
+    exercise1_12Name: 'Скрестное движение ногой',
+    exercise1_13Name: 'Подъем верхней части туловища',
+    exercise1_14Name: 'Колено наружу',
+    exercise1_15Name: 'Колено вовнутрь',
+    exercise1_16Name: 'Два колена в стороны',
+    exercise1_17Name: 'Подтягивание колена к животу',
+    exercise1_18Name: 'Колено к животу с локтем',
+    exercise1_19Name: 'Удержание таза',
+    exercise1_20Name: 'Ходьба стопами вокруг таза',
+    exercise1_21Name: 'Подтягивание колена руками',
+    exercise1_22Name: 'Подтягивание двух коленей руками',
+    exercise1_23Name: 'Колени ко лбу',
+    exercise1_24Name: 'Подъем туловища с руками на ногах',
+    exercise1_25Name: 'Растяжка поочередно',
+    exercise1_26Name: 'Сгибание ног поочередно',
+    exercise1_27Name: 'Подъем прямой ноги поочередно',
+    exercise1_28Name: 'Подъем ноги с противоположной рукой',
+    exercise1_29Name: 'Подъем туловища к ногам',
+    exercise1_30Name: 'Подъем двух прямых ног',
+    exercise1_31Name: 'Лодочка',
+    exercise1_32Name: 'Отведение ноги в сторону на животе',
+    exercise1_33Name: 'Скручивание на животе',
+    exercise1_34Name: 'Колено к локтю',
+    exercise1_35Name: 'Подъем таза и коленей',
+    exercise1_36Name: 'Ходьба на носках',
+    exercise1_37Name: 'Подъем коленей на животе',
+    exercise1_38Name: 'Кошечка',
+    exercise1_39Name: 'Подъем руки',
+    exercise1_40Name: 'Подъем прямой ноги на четвереньках',
+    exercise1_41Name: 'Подъем ноги и руки',
+    exercise1_42Name: 'Колено к одноименной ладони',
+    exercise1_43Name: 'Колено к противоположной ладони',
+    exercise1_44Name: 'Колено за мизинец',
+    exercise1_45Name: 'Колено к одноименному локтю',
+    exercise1_46Name: 'Колено к противоположному локтю',
+    exercise1_47Name: 'Колено ко лбу',
+    exercise1_48Name: 'Колено к плечу',
+    exercise1_49Name: 'Ходьба на лодыжках',
+    exercise1_50Name: 'Ходьба на локтях',
+    exercise1_51Name: 'Растяжка на пятках',
+    exercise1_52Name: 'Успокоение дыхания',
+
+    // Exercise Descriptions - Training 1
+    exercise1_1Description: 'Растягивать мышцы спины (руки лежат над головой).',
+    exercise1_2Description: 'Пошевелить пальцами ног.',
+    exercise1_3Description: 'Стопы на себя и от себя.',
+    exercise1_4Description: 'Поочередно стопа наружу (мизинцем дотянуться до пола).',
+    exercise1_5Description: 'Поочередно стопа вовнутрь (большим пальцем дотянуться до пола).',
+    exercise1_6Description: 'Круговые движения в голеностопе в одну и в другую сторону.',
+    exercise1_7Description: 'Поочередно сгибаем и разгибаем ноги в коленных суставах, пятка скользит по полу.',
+    exercise1_8Description: 'Поочередно поднимаем прямую ногу вверх.',
+    exercise1_9Description: 'Поочередно поднимаем прямую ногу и противоположной рукой стараемся коснуться носка ноги.',
+    exercise1_10Description: 'Руки вдоль туловища. Приподнимаем таз и держим 5 сек. 3 раза.',
+    exercise1_11Description: 'Поочередно отводим ногу в сторону максимально, пятка скользит по полу.',
+    exercise1_12Description: 'Правую ногу влево, скрестно, разворачиваем таз, носком ноги стараемся дотянуться до пола, плечи не отрываем.',
+    exercise1_13Description: 'Ноги вместе, носки на себя, с напряжением в мышцах ног, приподнять верхнюю часть туловища и посмотреть на носки. Удержаться в таком положении 5 секунд. 3 раза.',
+    exercise1_14Description: 'Поочередно выкладываем колено наружу, стараемся коленом дотянуться до пола.',
+    exercise1_15Description: 'Поочередно колено вовнутрь к противоположной стопе.',
+    exercise1_16Description: 'Два колена вместе выкладываем на пол в одну, затем в другую сторону.',
+    exercise1_17Description: 'Поочередно колено подтягиваем к животу.',
+    exercise1_18Description: 'Поочередно подтягиваем колено к животу и противоположным локтем стараемся дотянуться до колена.',
+    exercise1_19Description: 'Приподнять таз, удержать (3 раза по 5 секунд).',
+    exercise1_20Description: 'Походить вокруг таза стопами в одну и в другую сторону (таз вначале расслаблен, затем приподнят).',
+    exercise1_21Description: 'Поочередно подтягиваем колено к животу с помощью рук (обхватив колено руками).',
+    exercise1_22Description: 'Два колена вместе подтягиваем к животу с помощью рук.',
+    exercise1_23Description: 'Подтягиваем два колена (с помощью рук) и стараемся лбом коснуться.',
+    exercise1_24Description: 'Ноги согнуты, руки лежат на ногах. Приподнимаем верхнюю часть туловища.',
+    exercise1_25Description: 'Растягиваем мышцы спины, руки и ноги вытягиваем поочередно.',
+    exercise1_26Description: 'Поочередно сгибаем ноги в коленных суставах.',
+    exercise1_27Description: 'Поочередно поднимаем прямую ногу вверх.',
+    exercise1_28Description: 'Поочередно поднимаем вверх прямую ногу и противоположную руку.',
+    exercise1_29Description: 'Приподнимаем верхнюю часть туловища, руками потянулись к ногам (3 раза по 5 секунд).',
+    exercise1_30Description: 'Приподнять и удержать две прямые ноги (3 раза по 5 секунд).',
+    exercise1_31Description: 'Лодочка (3 раза по 5 секунд) - удерживание на животе.',
+    exercise1_32Description: 'Поочередно отводить ногу в сторону.',
+    exercise1_33Description: 'Поочередно правую ногу влево, разворачивая таз, носком дотронуться до пола и наоборот.',
+    exercise1_34Description: 'Колено скользит по полу к локтю.',
+    exercise1_35Description: 'Ноги на носках. Приподнять таз и колени, удержать (3 раза по 5 секунд).',
+    exercise1_36Description: 'Походить на носках вправо и влево.',
+    exercise1_37Description: 'Ноги согнуты в коленных суставах. Поочередно поднимаем колени вверх, пятка потянулась к спине.',
+    exercise1_38Description: 'Выгнуть спину дугой, посмотреть вниз. Прогнуть спину, посмотреть вверх (кошечка).',
+    exercise1_39Description: 'Поочередно поднимаем руку вверх, посмотреть на руку.',
+    exercise1_40Description: 'Поочередно поднимать прямую ногу вверх.',
+    exercise1_41Description: 'Поочередно поднимать прямую ногу и противоположную руку.',
+    exercise1_42Description: 'Колено скользит по полу к ладони одноименной руки.',
+    exercise1_43Description: 'Колено скользит по полу к противоположной ладони.',
+    exercise1_44Description: 'Колено скользит по полу за мизинец одноименной руки.',
+    exercise1_45Description: 'Колено подтягиваем к локтю одноименной руки.',
+    exercise1_46Description: 'Колено подтягиваем к противоположному локтю.',
+    exercise1_47Description: 'Поднимаем колено вверх и стараемся коснуться его лбом.',
+    exercise1_48Description: 'Поднимаем колено к плечу одноименной руки.',
+    exercise1_49Description: 'Походить на лодыжках вправо и влево.',
+    exercise1_50Description: 'Походить на локтях.',
+    exercise1_51Description: 'Стоя на ладонях, не отрывая рук от пола, опустить таз на пятки и не отрываясь от пяток потянуться за руками вперед (растягиваем мышцы спины).',
+    exercise1_52Description: 'Сидя на пятках (успокаиваем дыхание). Медленно перед собой поднимаем руки вверх - вдох через нос. Медленно через стороны опускаем руки вниз - выдох ртом.',
+
+    // Exercise Starting Positions - Training 1
+    exercise1_1StartingPosition: 'Лежа на спине, ноги лежат на полу',
+    exercise1_2StartingPosition: 'Лежа на спине, ноги лежат на полу',
+    exercise1_3StartingPosition: 'Лежа на спине, ноги лежат на полу',
+    exercise1_4StartingPosition: 'Лежа на спине, ноги лежат на полу',
+    exercise1_5StartingPosition: 'Лежа на спине, ноги лежат на полу',
+    exercise1_6StartingPosition: 'Лежа на спине, ноги лежат на полу',
+    exercise1_7StartingPosition: 'Лежа на спине, ноги лежат на полу',
+    exercise1_8StartingPosition: 'Лежа на спине, ноги лежат на полу',
+    exercise1_9StartingPosition: 'Лежа на спине, ноги лежат на полу',
+    exercise1_10StartingPosition: 'Лежа на спине, ноги лежат на полу',
+    exercise1_11StartingPosition: 'Лежа на спине, руки под головой в замке',
+    exercise1_12StartingPosition: 'Лежа на спине, руки под головой в замке',
+    exercise1_13StartingPosition: 'Лежа на спине, руки под головой в замке',
+    exercise1_14StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_15StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_16StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_17StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_18StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_19StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_20StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_21StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_22StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_23StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_24StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_25StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_26StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_27StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_28StartingPosition: 'Лежа на спине, ноги согнуты в коленных суставах, руки над головой в замке',
+    exercise1_29StartingPosition: 'Лежа на спине, руки за спиной в замке',
+    exercise1_30StartingPosition: 'Лежа на спине, руки вдоль туловища, ноги вместе',
+    exercise1_31StartingPosition: 'Лежа на животе, руки вытянуты вперед',
+    exercise1_32StartingPosition: 'Лежа на животе, руки под подбородком',
+    exercise1_33StartingPosition: 'Лежа на животе, руки под подбородком',
+    exercise1_34StartingPosition: 'Лежа на животе, руки под подбородком',
+    exercise1_35StartingPosition: 'Лежа на животе, руки под подбородком',
+    exercise1_36StartingPosition: 'Лежа на животе, руки под подбородком',
+    exercise1_37StartingPosition: 'Лежа на животе, руки под подбородком',
+    exercise1_38StartingPosition: 'Стоя на четвереньках',
+    exercise1_39StartingPosition: 'Стоя на четвереньках',
+    exercise1_40StartingPosition: 'Стоя на четвереньках',
+    exercise1_41StartingPosition: 'Стоя на четвереньках',
+    exercise1_42StartingPosition: 'Стоя на четвереньках',
+    exercise1_43StartingPosition: 'Стоя на четвереньках',
+    exercise1_44StartingPosition: 'Стоя на четвереньках',
+    exercise1_45StartingPosition: 'Стоя на четвереньках',
+    exercise1_46StartingPosition: 'Стоя на четвереньках',
+    exercise1_47StartingPosition: 'Стоя на четвереньках',
+    exercise1_48StartingPosition: 'Стоя на четвереньках',
+    exercise1_49StartingPosition: 'Стоя на четвереньках',
+    exercise1_50StartingPosition: 'Стоя на четвереньках',
+    exercise1_51StartingPosition: 'Стоя на четвереньках',
+    exercise1_52StartingPosition: 'Стоя на четвереньках',
+
+    // Exercise Names - Training 2
+    exercise2_1Name: 'Растяжка Кошка-Корова',
+    exercise2_2Name: 'Растяжка Сгибателей Бедра',
+    exercise2_3Name: 'Растяжка Подколенных Сухожилий',
+    exercise2_4Name: 'Растяжка Четырехглавой Мышцы',
+    exercise2_5Name: 'Скручивание Позвоночника',
+
+    // Exercise Descriptions - Training 2
+    exercise2_1Description: 'Начните на четвереньках, выгните спину вверх (кошка), затем опустите вниз (корова).',
+    exercise2_2Description: 'Сделайте выпад вперед, держа заднюю ногу прямой.',
+    exercise2_3Description: 'Сядьте на пол с одной вытянутой ногой, потянитесь вперед к пальцам ног.',
+    exercise2_4Description: 'Встаньте и подтяните пятку к ягодицам, держась за лодыжку.',
+    exercise2_5Description: 'Сядьте с вытянутыми ногами, перекиньте одну ногу через другую и поверните туловище.',
+
+    // Exercise Starting Positions - Training 2
+    exercise2_1StartingPosition: 'Начните на четвереньках с руками прямо под плечами и коленями под бедрами.',
+
+    // Exercise Names - Training 3
+    exercise3_1Name: 'Поза Ребенка',
+    exercise3_2Name: 'Наклон Вперед Сидя',
+    exercise3_3Name: 'Скручивание Лежа',
+    exercise3_4Name: 'Ноги Вверх у Стены',
+
+    // Exercise Descriptions - Training 3
+    exercise3_1Description: 'Встаньте на колени, сядьте на пятки и вытяните руки вперед.',
+    exercise3_2Description: 'Сядьте с вытянутыми ногами, медленно потянитесь вперед и держите ступни или лодыжки.',
+    exercise3_3Description: 'Лягте на спину, прижмите колени к груди, затем опустите их в сторону.',
+    exercise3_4Description: 'Лягте на спину и положите ноги вертикально на стену.',
+
+    // Exercise Starting Positions - Training 3
+    exercise3_1StartingPosition: 'Начните в положении стоя на коленях на коврике или мягкой поверхности.',
   },
   zh: {
     selectLanguage: '选择语言',
@@ -578,6 +1009,8 @@ export const translations: Record<string, Record<string, string>> = {
     reminderEnabled: '启用提醒',
     selectDays: '选择日期',
     selectTime: '选择时间',
+    differentTimePerDay: '每天不同时间',
+    timePerDay: '每天时间',
     ttsOptions: 'TTS选项',
     ttsEnabled: '启用文字转语音',
     trainingOptions: '训练选项',
@@ -630,8 +1063,15 @@ export const translations: Record<string, Record<string, string>> = {
     success: '成功',
     loading: '加载中...',
     trainingNotFound: '未找到训练',
+    exerciseNotFound: '未找到练习',
     failedToSaveHistory: '保存训练历史失败',
     settingsSaved: '设置保存成功',
+    enterTrainingName: '请输入训练名称',
+    selectAtLeastOneExercise: '请至少选择一个练习',
+    customTrainingWith: '自定义训练包含',
+    customTrainingCreated: '自定义训练已创建！',
+    deleteTraining: '删除训练',
+    areYouSure: '您确定吗？',
     noTrainings: '尚未完成训练',
     createCustomTraining: '创建自定义训练',
     trainingName: '训练名称',
@@ -652,6 +1092,54 @@ export const translations: Record<string, Record<string, string>> = {
     friday: '星期五',
     saturday: '星期六',
     sunday: '星期日',
+
+    // Exercise Names - Training 1
+    exercise1_1Name: '颈部拉伸',
+    exercise1_2Name: '肩部旋转',
+    exercise1_3Name: '手臂画圈',
+    exercise1_4Name: '前屈',
+
+    // Exercise Descriptions - Training 1
+    exercise1_1Description: '轻轻将头部向右倾斜，保持30秒，然后在左侧重复。',
+    exercise1_2Description: '向后做圆周运动旋转肩膀10次，然后向前10次。',
+    exercise1_3Description: '将手臂伸向两侧，做小圈，逐渐增大圈的大小。',
+    exercise1_4Description: '站立，双脚与臀部同宽，慢慢向前弯曲，伸向脚趾。',
+
+    // Exercise Starting Positions - Training 1
+    exercise1_1StartingPosition: '站立或坐着，背部挺直，肩膀放松。',
+    exercise1_2StartingPosition: '站立，双脚与肩同宽，手臂放松放在两侧。',
+
+    // Exercise Names - Training 2
+    exercise2_1Name: '猫牛式拉伸',
+    exercise2_2Name: '髋屈肌拉伸',
+    exercise2_3Name: '腿筋拉伸',
+    exercise2_4Name: '股四头肌拉伸',
+    exercise2_5Name: '脊柱扭转',
+
+    // Exercise Descriptions - Training 2
+    exercise2_1Description: '从四肢着地开始，向上拱起背部（猫式），然后向下放低（牛式）。',
+    exercise2_2Description: '向前迈步成弓步姿势，保持后腿伸直。',
+    exercise2_3Description: '坐在地板上，一条腿伸直，向前伸向脚趾。',
+    exercise2_4Description: '站立并将脚跟拉向臀部，抓住脚踝。',
+    exercise2_5Description: '坐着，双腿伸直，将一条腿交叉放在另一条腿上并扭转躯干。',
+
+    // Exercise Starting Positions - Training 2
+    exercise2_1StartingPosition: '从四肢着地开始，手直接放在肩膀下方，膝盖在臀部下方。',
+
+    // Exercise Names - Training 3
+    exercise3_1Name: '儿童式',
+    exercise3_2Name: '坐姿前屈',
+    exercise3_3Name: '仰卧扭转',
+    exercise3_4Name: '靠墙举腿',
+
+    // Exercise Descriptions - Training 3
+    exercise3_1Description: '跪在地板上，坐回脚跟，向前伸展手臂。',
+    exercise3_2Description: '坐着，双腿伸直，慢慢向前伸展，抓住脚或脚踝。',
+    exercise3_3Description: '仰卧，将膝盖抱向胸部，然后让它们落向一侧。',
+    exercise3_4Description: '仰卧，将腿垂直靠在墙上。',
+
+    // Exercise Starting Positions - Training 3
+    exercise3_1StartingPosition: '在垫子或柔软表面上以跪姿开始。',
   },
   ja: {
     selectLanguage: '言語を選択',
@@ -685,6 +1173,8 @@ export const translations: Record<string, Record<string, string>> = {
     reminderEnabled: 'リマインダーを有効化',
     selectDays: '曜日を選択',
     selectTime: '時刻を選択',
+    differentTimePerDay: '日ごとに異なる時間',
+    timePerDay: '日ごとの時間',
     ttsOptions: 'TTSオプション',
     ttsEnabled: 'テキスト読み上げを有効化',
     trainingOptions: 'トレーニングオプション',
@@ -737,8 +1227,15 @@ export const translations: Record<string, Record<string, string>> = {
     success: '成功',
     loading: '読み込み中...',
     trainingNotFound: 'トレーニングが見つかりません',
+    exerciseNotFound: 'エクササイズが見つかりません',
     failedToSaveHistory: 'トレーニング履歴の保存に失敗しました',
     settingsSaved: '設定が正常に保存されました',
+    enterTrainingName: 'トレーニング名を入力してください',
+    selectAtLeastOneExercise: '少なくとも1つのエクササイズを選択してください',
+    customTrainingWith: 'カスタムトレーニング（含む：',
+    customTrainingCreated: 'カスタムトレーニングが作成されました！',
+    deleteTraining: 'トレーニングを削除',
+    areYouSure: '本当によろしいですか？',
     noTrainings: 'トレーニング履歴なし',
     createCustomTraining: 'カスタムトレーニングを作成',
     trainingName: 'トレーニング名',
@@ -759,6 +1256,54 @@ export const translations: Record<string, Record<string, string>> = {
     friday: '金曜日',
     saturday: '土曜日',
     sunday: '日曜日',
+
+    // Exercise Names - Training 1
+    exercise1_1Name: '首のストレッチ',
+    exercise1_2Name: '肩回し',
+    exercise1_3Name: '腕回し',
+    exercise1_4Name: '前屈',
+
+    // Exercise Descriptions - Training 1
+    exercise1_1Description: '頭を右に優しく傾け、30秒間保持し、左側で繰り返します。',
+    exercise1_2Description: '肩を後ろに円を描くように10回回し、次に前に10回回します。',
+    exercise1_3Description: '腕を横に伸ばし、小さな円を描き、徐々にサイズを大きくします。',
+    exercise1_4Description: '足を腰幅に開いて立ち、ゆっくりと前に曲げてつま先に手を伸ばします。',
+
+    // Exercise Starting Positions - Training 1
+    exercise1_1StartingPosition: '背筋を伸ばし、肩をリラックスさせて立つか座ります。',
+    exercise1_2StartingPosition: '足を肩幅に開いて立ち、腕を横にリラックスさせます。',
+
+    // Exercise Names - Training 2
+    exercise2_1Name: 'キャット＆カウストレッチ',
+    exercise2_2Name: '股関節屈筋ストレッチ',
+    exercise2_3Name: 'ハムストリングストレッチ',
+    exercise2_4Name: '大腿四頭筋ストレッチ',
+    exercise2_5Name: '脊椎ツイスト',
+
+    // Exercise Descriptions - Training 2
+    exercise2_1Description: '四つん這いから始め、背中を上にアーチ状にし（猫）、次に下に落とします（牛）。',
+    exercise2_2Description: 'ランジポジションに前に踏み出し、後ろ脚をまっすぐに保ちます。',
+    exercise2_3Description: '床に座り、片脚を伸ばして、つま先に向かって前に手を伸ばします。',
+    exercise2_4Description: '立ってかかとを臀部に引き寄せ、足首を持ちます。',
+    exercise2_5Description: '脚を伸ばして座り、片脚をもう片方の上に交差させ、胴体をひねります。',
+
+    // Exercise Starting Positions - Training 2
+    exercise2_1StartingPosition: '手を肩の真下、膝を腰の真下にして四つん這いから始めます。',
+
+    // Exercise Names - Training 3
+    exercise3_1Name: 'チャイルドポーズ',
+    exercise3_2Name: '座位前屈',
+    exercise3_3Name: '仰向けツイスト',
+    exercise3_4Name: '壁に足を上げる',
+
+    // Exercise Descriptions - Training 3
+    exercise3_1Description: '床に膝をつき、かかとの上に座り、腕を前に伸ばします。',
+    exercise3_2Description: '脚を伸ばして座り、ゆっくりと前に手を伸ばして足または足首をつかみます。',
+    exercise3_3Description: '仰向けに横たわり、膝を胸に引き寄せ、片側に落とします。',
+    exercise3_4Description: '仰向けに横たわり、脚を壁に垂直に当てます。',
+
+    // Exercise Starting Positions - Training 3
+    exercise3_1StartingPosition: 'マットまたは柔らかい表面で膝をついた姿勢から始めます。',
   },
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -19,6 +19,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNetworkStatus } from '../hooks/useNetworkStatus';
 import { UserSettings } from '../types';
 import DaySelector from '../components/DaySelector';
+import TimeInput from '../components/TimeInput';
 import { colors, spacing, fontSize, borderRadius, shadows } from '../utils/theme';
 import { validation } from '../utils/validation';
 
@@ -29,58 +30,88 @@ export default function SettingsScreen() {
   const { isConnected } = useNetworkStatus();
   const [localSettings, setLocalSettings] = useState<UserSettings | null>(settings);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [dateInputValue, setDateInputValue] = useState('');
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    setLocalSettings(settings);
+    if (settings) {
+      // Ensure new fields are initialized for backward compatibility
+      const migratedSettings = {
+        ...settings,
+        differentTimePerDay: settings.differentTimePerDay ?? false,
+        reminderTimesPerDay: settings.reminderTimesPerDay ?? {},
+      };
+      setLocalSettings(migratedSettings);
+
+      // Initialize date input value from settings
+      if (settings.dateOfBirth) {
+        setDateInputValue(formatDateDisplay(settings.dateOfBirth));
+      }
+    }
   }, [settings]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   if (!localSettings) {
     return null;
   }
 
-  const handleSave = async () => {
-    if (localSettings) {
-      // Validate inputs
-      const nameValidation = validation.validateUserName(localSettings.userName);
-      if (!nameValidation.isValid && localSettings.userName) {
-        Alert.alert(translate('error'), nameValidation.error);
+  // Auto-save settings with validation
+  const updateAndSaveSetting = async (key: keyof UserSettings, value: any) => {
+    if (!localSettings) return;
+
+    const updatedSettings = { ...localSettings, [key]: value };
+    setLocalSettings(updatedSettings);
+
+    // Validate before saving
+    if (key === 'userName') {
+      const validation_result = validation.validateUserName(value);
+      if (!validation_result.isValid && value) {
+        return; // Don't save invalid data
+      }
+    } else if (key === 'height') {
+      const validation_result = validation.validateHeight(value, updatedSettings.unitSystem);
+      if (!validation_result.isValid) {
         return;
       }
-
-      const heightValidation = validation.validateHeight(
-        localSettings.height,
-        localSettings.unitSystem
-      );
-      if (!heightValidation.isValid) {
-        Alert.alert(translate('error'), heightValidation.error);
+    } else if (key === 'weight') {
+      const validation_result = validation.validateWeight(value, updatedSettings.unitSystem);
+      if (!validation_result.isValid) {
         return;
       }
-
-      const weightValidation = validation.validateWeight(
-        localSettings.weight,
-        localSettings.unitSystem
-      );
-      if (!weightValidation.isValid) {
-        Alert.alert(translate('error'), weightValidation.error);
+    } else if (key === 'pauseBetweenExercises') {
+      const validation_result = validation.validatePause(value);
+      if (!validation_result.isValid) {
         return;
       }
-
-      const pauseValidation = validation.validatePause(localSettings.pauseBetweenExercises);
-      if (!pauseValidation.isValid) {
-        Alert.alert(translate('error'), pauseValidation.error);
-        return;
-      }
-
-      await updateSettings(localSettings);
-      Alert.alert(translate('success'), translate('settingsSaved'));
     }
+
+    await updateSettings(updatedSettings);
   };
 
-  const updateLocalSetting = (key: keyof UserSettings, value: any) => {
-    if (localSettings) {
-      setLocalSettings({ ...localSettings, [key]: value });
+  // Debounced auto-save for text inputs (saves after 1 second of no typing)
+  const updateAndSaveSettingDebounced = (key: keyof UserSettings, value: any) => {
+    if (!localSettings) return;
+
+    const updatedSettings = { ...localSettings, [key]: value };
+    setLocalSettings(updatedSettings);
+
+    // Clear existing timeout
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
     }
+
+    // Set new timeout to save after 1 second
+    saveTimeoutRef.current = setTimeout(async () => {
+      await updateAndSaveSetting(key, value);
+    }, 1000);
   };
 
   const handleGoogleSignIn = async () => {
@@ -121,9 +152,61 @@ export default function SettingsScreen() {
     }
   };
 
+  // Format date input as user types (adds slashes automatically)
+  const formatDateInput = (input: string): string => {
+    // Remove all non-numeric characters
+    const numbers = input.replace(/\D/g, '');
+
+    // Format as DD/MM/YYYY
+    if (numbers.length <= 2) {
+      return numbers;
+    } else if (numbers.length <= 4) {
+      return `${numbers.slice(0, 2)}/${numbers.slice(2)}`;
+    } else {
+      return `${numbers.slice(0, 2)}/${numbers.slice(2, 4)}/${numbers.slice(4, 8)}`;
+    }
+  };
+
+  // Parse DD/MM/YYYY to YYYY-MM-DD for storage
+  const parseDateInput = (input: string): string | null => {
+    const parts = input.split('/');
+    if (parts.length !== 3) return null;
+
+    const day = parts[0].padStart(2, '0');
+    const month = parts[1].padStart(2, '0');
+    const year = parts[2];
+
+    if (year.length !== 4) return null;
+
+    // Basic validation
+    const dayNum = parseInt(day, 10);
+    const monthNum = parseInt(month, 10);
+    const yearNum = parseInt(year, 10);
+
+    if (dayNum < 1 || dayNum > 31) return null;
+    if (monthNum < 1 || monthNum > 12) return null;
+    if (yearNum < 1900 || yearNum > new Date().getFullYear()) return null;
+
+    return `${year}-${month}-${day}`;
+  };
+
+  // Handle date input change
+  const handleDateInputChange = (text: string) => {
+    const formatted = formatDateInput(text);
+    setDateInputValue(formatted);
+
+    // If date is complete, validate and save
+    if (formatted.length === 10) {
+      const parsed = parseDateInput(formatted);
+      if (parsed) {
+        updateAndSaveSetting('dateOfBirth', parsed);
+      }
+    }
+  };
+
   // Format date from YYYY-MM-DD to DD/MM/YYYY
   const formatDateDisplay = (dateString: string | null): string => {
-    if (!dateString) return 'Select date';
+    if (!dateString) return '';
     const [year, month, day] = dateString.split('-');
     return `${day}/${month}/${year}`;
   };
@@ -144,6 +227,27 @@ export default function SettingsScreen() {
     if (diffMinutes < 60) return `${diffMinutes} ${translate('minutesAgo')}`;
     if (diffHours < 24) return `${diffHours} ${translate('hoursAgo')}`;
     return `${diffDays} ${translate('daysAgo')}`;
+  };
+
+  // Get time for a specific day (fallback to default reminderTime)
+  const getTimeForDay = (day: number): string => {
+    if (!localSettings) return '09:00';
+    if (!localSettings.reminderTimesPerDay) return localSettings.reminderTime;
+    return localSettings.reminderTimesPerDay[day] || localSettings.reminderTime;
+  };
+
+  // Update time for a specific day
+  const updateTimeForDay = (day: number, time: string) => {
+    if (!localSettings) return;
+    const currentTimes = localSettings.reminderTimesPerDay || {};
+    const updatedTimes = { ...currentTimes, [day]: time };
+    updateAndSaveSetting('reminderTimesPerDay', updatedTimes);
+  };
+
+  // Get day name from day number
+  const getDayName = (dayNum: number): string => {
+    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    return translate(dayNames[dayNum]);
   };
 
   const languages = [
@@ -168,7 +272,7 @@ export default function SettingsScreen() {
               value={localSettings.userName}
               onChangeText={(text) => {
                 const sanitized = validation.sanitizeText(text, 50);
-                updateLocalSetting('userName', sanitized);
+                updateAndSaveSettingDebounced('userName', sanitized);
               }}
               placeholder="Enter your name"
               accessibilityLabel={translate('userName')}
@@ -182,7 +286,7 @@ export default function SettingsScreen() {
               value={localSettings.height.toString()}
               onChangeText={(text) => {
                 const num = parseFloat(text);
-                if (!isNaN(num)) updateLocalSetting('height', num);
+                if (!isNaN(num)) updateAndSaveSettingDebounced('height', num);
               }}
               keyboardType="numeric"
               placeholder={localSettings.unitSystem === 'metric' ? 'cm' : 'in'}
@@ -196,7 +300,7 @@ export default function SettingsScreen() {
               value={localSettings.weight.toString()}
               onChangeText={(text) => {
                 const num = parseFloat(text);
-                if (!isNaN(num)) updateLocalSetting('weight', num);
+                if (!isNaN(num)) updateAndSaveSettingDebounced('weight', num);
               }}
               keyboardType="numeric"
               placeholder={localSettings.unitSystem === 'metric' ? 'kg' : 'lb'}
@@ -205,16 +309,26 @@ export default function SettingsScreen() {
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.label}>{translate('dateOfBirth')}</Text>
-            <TouchableOpacity
-              style={styles.dateButton}
-              onPress={() => setShowDatePicker(true)}
-              accessibilityLabel={translate('dateOfBirth')}
-              accessibilityRole="button"
-            >
-              <Text style={styles.dateText}>
-                {formatDateDisplay(localSettings.dateOfBirth)}
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.dateInputRow}>
+              <TextInput
+                style={[styles.input, styles.dateInput]}
+                value={dateInputValue}
+                onChangeText={handleDateInputChange}
+                keyboardType="numeric"
+                placeholder="DD/MM/YYYY"
+                maxLength={10}
+                accessibilityLabel={translate('dateOfBirth')}
+                accessibilityHint="Enter date as DD/MM/YYYY"
+              />
+              <TouchableOpacity
+                style={styles.calendarButton}
+                onPress={() => setShowDatePicker(true)}
+                accessibilityLabel="Open calendar picker"
+                accessibilityRole="button"
+              >
+                <Text style={styles.calendarIcon}>📅</Text>
+              </TouchableOpacity>
+            </View>
             {Platform.OS === 'web' ? (
               showDatePicker && (
                 <View style={styles.webDatePickerContainer}>
@@ -222,7 +336,9 @@ export default function SettingsScreen() {
                     type="date"
                     value={localSettings.dateOfBirth || ''}
                     onChange={(e: any) => {
-                      updateLocalSetting('dateOfBirth', e.target.value);
+                      const newDate = e.target.value;
+                      updateAndSaveSetting('dateOfBirth', newDate);
+                      setDateInputValue(formatDateDisplay(newDate));
                       setShowDatePicker(false);
                     }}
                     max={new Date().toISOString().split('T')[0]}
@@ -254,7 +370,9 @@ export default function SettingsScreen() {
                     onChange={(event, date) => {
                       setShowDatePicker(Platform.OS === 'ios');
                       if (date) {
-                        updateLocalSetting('dateOfBirth', date.toISOString().split('T')[0]);
+                        const dateString = date.toISOString().split('T')[0];
+                        updateAndSaveSetting('dateOfBirth', dateString);
+                        setDateInputValue(formatDateDisplay(dateString));
                       }
                       if (event.type === 'dismissed') {
                         setShowDatePicker(false);
@@ -281,7 +399,7 @@ export default function SettingsScreen() {
             <Text style={styles.label}>{translate('keepScreenOn')}</Text>
             <Switch
               value={localSettings.keepScreenOn}
-              onValueChange={(value) => updateLocalSetting('keepScreenOn', value)}
+              onValueChange={(value) => updateAndSaveSetting('keepScreenOn', value)}
               trackColor={{ false: colors.disabled, true: colors.primary }}
               accessibilityLabel={translate('keepScreenOn')}
             />
@@ -298,7 +416,7 @@ export default function SettingsScreen() {
                   ]}
                   onPress={() => {
                     setLanguage(lang.code);
-                    updateLocalSetting('language', lang.code);
+                    updateAndSaveSetting('language', lang.code);
                   }}
                   accessibilityLabel={lang.name}
                   accessibilityRole="button"
@@ -324,7 +442,7 @@ export default function SettingsScreen() {
                   styles.unitButton,
                   localSettings.unitSystem === 'metric' && styles.unitButtonActive,
                 ]}
-                onPress={() => updateLocalSetting('unitSystem', 'metric')}
+                onPress={() => updateAndSaveSetting('unitSystem', 'metric')}
                 accessibilityLabel={translate('metric')}
                 accessibilityRole="button"
                 accessibilityState={{ selected: localSettings.unitSystem === 'metric' }}
@@ -343,7 +461,7 @@ export default function SettingsScreen() {
                   styles.unitButton,
                   localSettings.unitSystem === 'imperial' && styles.unitButtonActive,
                 ]}
-                onPress={() => updateLocalSetting('unitSystem', 'imperial')}
+                onPress={() => updateAndSaveSetting('unitSystem', 'imperial')}
                 accessibilityLabel={translate('imperial')}
                 accessibilityRole="button"
                 accessibilityState={{ selected: localSettings.unitSystem === 'imperial' }}
@@ -367,7 +485,7 @@ export default function SettingsScreen() {
             <Text style={styles.label}>{translate('reminderEnabled')}</Text>
             <Switch
               value={localSettings.reminderEnabled}
-              onValueChange={(value) => updateLocalSetting('reminderEnabled', value)}
+              onValueChange={(value) => updateAndSaveSetting('reminderEnabled', value)}
               trackColor={{ false: colors.disabled, true: colors.primary }}
               accessibilityLabel={translate('reminderEnabled')}
             />
@@ -378,46 +496,48 @@ export default function SettingsScreen() {
                 <Text style={styles.label}>{translate('selectDays')}</Text>
                 <DaySelector
                   selectedDays={localSettings.reminderDays}
-                  onChange={(days) => updateLocalSetting('reminderDays', days)}
+                  onChange={(days) => updateAndSaveSetting('reminderDays', days)}
                 />
               </View>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>{translate('selectTime')}</Text>
-                <TouchableOpacity
-                  style={styles.dateButton}
-                  onPress={() => setShowTimePicker(true)}
-                  accessibilityLabel={translate('selectTime')}
-                  accessibilityRole="button"
-                >
-                  <Text style={styles.dateText}>{localSettings.reminderTime}</Text>
-                </TouchableOpacity>
-                {showTimePicker && (
-                  <DateTimePicker
-                    value={new Date(`2000-01-01T${localSettings.reminderTime}`)}
-                    mode="time"
-                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                    onChange={(event, date) => {
-                      setShowTimePicker(Platform.OS === 'ios');
-                      if (date) {
-                        const hours = date.getHours().toString().padStart(2, '0');
-                        const minutes = date.getMinutes().toString().padStart(2, '0');
-                        updateLocalSetting('reminderTime', `${hours}:${minutes}`);
-                      }
-                      if (event.type === 'dismissed') {
-                        setShowTimePicker(false);
-                      }
-                    }}
-                  />
-                )}
-                {showTimePicker && Platform.OS === 'ios' && (
-                  <TouchableOpacity
-                    style={styles.doneButton}
-                    onPress={() => setShowTimePicker(false)}
-                  >
-                    <Text style={styles.doneButtonText}>Done</Text>
-                  </TouchableOpacity>
-                )}
+
+              <View style={styles.switchGroup}>
+                <Text style={styles.label}>{translate('differentTimePerDay')}</Text>
+                <Switch
+                  value={localSettings.differentTimePerDay}
+                  onValueChange={(value) => updateAndSaveSetting('differentTimePerDay', value)}
+                  trackColor={{ false: colors.disabled, true: colors.primary }}
+                  accessibilityLabel={translate('differentTimePerDay')}
+                />
               </View>
+
+              {!localSettings.differentTimePerDay ? (
+                // Single time for all days
+                <View style={styles.inputGroup}>
+                  <TimeInput
+                    value={localSettings.reminderTime}
+                    onChange={(time) => updateAndSaveSetting('reminderTime', time)}
+                    label={translate('selectTime')}
+                  />
+                </View>
+              ) : (
+                // Different time for each selected day
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>{translate('timePerDay')}</Text>
+                  {localSettings.reminderDays.sort((a, b) => {
+                    // Sort to start from Monday
+                    const order = [1, 2, 3, 4, 5, 6, 0];
+                    return order.indexOf(a) - order.indexOf(b);
+                  }).map((day) => (
+                    <View key={day} style={styles.dayTimeContainer}>
+                      <TimeInput
+                        value={getTimeForDay(day)}
+                        onChange={(time) => updateTimeForDay(day, time)}
+                        label={getDayName(day)}
+                      />
+                    </View>
+                  ))}
+                </View>
+              )}
             </>
           )}
         </View>
@@ -428,7 +548,7 @@ export default function SettingsScreen() {
             <Text style={styles.label}>{translate('ttsEnabled')}</Text>
             <Switch
               value={localSettings.ttsEnabled}
-              onValueChange={(value) => updateLocalSetting('ttsEnabled', value)}
+              onValueChange={(value) => updateAndSaveSetting('ttsEnabled', value)}
               trackColor={{ false: colors.disabled, true: colors.primary }}
               accessibilityLabel={translate('ttsEnabled')}
             />
@@ -444,7 +564,7 @@ export default function SettingsScreen() {
               value={localSettings.pauseBetweenExercises.toString()}
               onChangeText={(text) => {
                 const num = parseInt(text, 10);
-                if (!isNaN(num)) updateLocalSetting('pauseBetweenExercises', num);
+                if (!isNaN(num)) updateAndSaveSettingDebounced('pauseBetweenExercises', num);
               }}
               keyboardType="numeric"
               placeholder="10"
@@ -536,15 +656,6 @@ export default function SettingsScreen() {
             </>
           )}
         </View>
-
-        <TouchableOpacity
-          style={styles.saveButton}
-          onPress={handleSave}
-          accessibilityLabel={translate('save')}
-          accessibilityRole="button"
-        >
-          <Text style={styles.saveButtonText}>{translate('save')}</Text>
-        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -589,6 +700,26 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     fontSize: fontSize.md,
     color: colors.text.primary,
+  },
+  dateInputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
+  dateInput: {
+    flex: 1,
+  },
+  calendarButton: {
+    backgroundColor: colors.primary,
+    borderRadius: borderRadius.sm,
+    padding: spacing.md,
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 50,
+    height: 48,
+  },
+  calendarIcon: {
+    fontSize: fontSize.xl,
   },
   switchGroup: {
     flexDirection: 'row',
@@ -683,18 +814,6 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
     fontStyle: 'italic',
   },
-  saveButton: {
-    backgroundColor: colors.primary,
-    borderRadius: borderRadius.md,
-    padding: spacing.lg,
-    alignItems: 'center',
-    marginTop: spacing.sm,
-  },
-  saveButtonText: {
-    color: colors.text.inverse,
-    fontSize: fontSize.lg,
-    fontWeight: 'bold',
-  },
   statusBanner: {
     backgroundColor: colors.warning || '#FFA500',
     borderRadius: borderRadius.sm,
@@ -774,5 +893,8 @@ const styles = StyleSheet.create({
     color: colors.error,
     fontSize: fontSize.md,
     fontWeight: 'bold',
+  },
+  dayTimeContainer: {
+    marginBottom: spacing.lg,
   },
 });

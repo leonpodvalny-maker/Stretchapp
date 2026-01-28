@@ -1,6 +1,6 @@
 # Firebase Setup Guide
 
-This guide will walk you through setting up Firebase for the Stretcher app to enable Google Sign-In and cloud sync functionality.
+This guide will walk you through setting up Firebase for the StretchApp app to enable Google Sign-In and cloud sync functionality.
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ This guide will walk you through setting up Firebase for the Stretcher app to en
 
 1. Go to [Firebase Console](https://console.firebase.google.com/)
 2. Click "Add project" or "Create a project"
-3. Enter project name: **Stretcher App** (or your preferred name)
+3. Enter project name: **StretchApp App** (or your preferred name)
 4. Click "Continue"
 5. Disable Google Analytics (optional for now)
 6. Click "Create project"
@@ -23,8 +23,9 @@ This guide will walk you through setting up Firebase for the Stretcher app to en
 
 ### For Web (Required for Expo)
 
-1. In the Firebase Console, click the **Web icon** (`</>`)
-2. Enter app nickname: **Stretcher Web**
+1. In the Firebase Console, on your project's **Project Overview** page, look for the section "Get started by adding Firebase to your app" (or "Add an app")
+2. Click the **Web icon** (`</>`) - it's typically the first icon in the row of platform options
+2. Enter app nickname: **StretchApp Web**
 3. Check "Also set up Firebase Hosting" (optional)
 4. Click "Register app"
 5. **IMPORTANT**: Copy the Firebase configuration object:
@@ -45,8 +46,8 @@ const firebaseConfig = {
 ### For Android
 
 1. In the Firebase Console, click the **Android icon**
-2. Enter package name: `com.stretch.app`
-3. Enter app nickname: **Stretcher Android** (optional)
+2. Enter package name: `com.stretchapp.app`
+3. Enter app nickname: **StretchApp Android** (optional)
 4. Click "Register app"
 5. Download the `google-services.json` file
 6. Place `google-services.json` in the **root directory** of your project (same level as `app.json`)
@@ -54,8 +55,8 @@ const firebaseConfig = {
 ### For iOS (Optional)
 
 1. In the Firebase Console, click the **iOS icon**
-2. Enter iOS bundle ID: `com.stretch.app`
-3. Enter app nickname: **Stretcher iOS** (optional)
+2. Enter iOS bundle ID: `com.stretchapp.app`
+3. Enter app nickname: **StretchApp iOS** (optional)
 4. Click "Register app"
 5. Download the `GoogleService-Info.plist` file
 6. Place it in the root directory
@@ -149,8 +150,8 @@ To enable Google Sign-In in your app, you need to create OAuth client IDs for ea
 1. In Google Cloud Console > **APIs & Services** > **Credentials**
 2. Click **+ CREATE CREDENTIALS** > **OAuth client ID**
 3. Select **Android** as application type
-4. Enter name: **Stretcher Android**
-5. Enter package name: `com.stretch.app`
+4. Enter name: **StretchApp Android**
+5. Enter package name: `com.stretchapp.app`
 6. Get SHA-1 fingerprint:
 
    **For development (debug keystore):**
@@ -176,8 +177,8 @@ To enable Google Sign-In in your app, you need to create OAuth client IDs for ea
 1. In Google Cloud Console > **APIs & Services** > **Credentials**
 2. Click **+ CREATE CREDENTIALS** > **OAuth client ID**
 3. Select **iOS** as application type
-4. Enter name: **Stretcher iOS**
-5. Enter bundle ID: `com.stretch.app`
+4. Enter name: **StretchApp iOS**
+5. Enter bundle ID: `com.stretchapp.app`
 6. Click **Create**
 7. Copy the **Client ID**
 8. Paste it into `src/services/authService.ts` as `GOOGLE_IOS_CLIENT_ID`

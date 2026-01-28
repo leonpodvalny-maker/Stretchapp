@@ -1,4 +1,4 @@
-# Code Review Fixes - Stretcher App
+# Code Review Fixes - StretchApp App
 
 This document outlines all the issues identified in the code review and the fixes applied.
 

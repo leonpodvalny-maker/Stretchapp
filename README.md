@@ -1,4 +1,4 @@
-# Stretcher - Fitness & Stretching Mobile App
+# StretchApp - Fitness & Stretching Mobile App
 
 A React Native mobile application for fitness and stretching routines.
 

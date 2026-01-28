@@ -10,14 +10,15 @@ interface DaySelectorProps {
 export default function DaySelector({ selectedDays, onChange }: DaySelectorProps) {
   const { translate } = useLanguage();
 
+  // Start week from Monday
   const days = [
-    { value: 0, label: translate('sunday') },
     { value: 1, label: translate('monday') },
     { value: 2, label: translate('tuesday') },
     { value: 3, label: translate('wednesday') },
     { value: 4, label: translate('thursday') },
     { value: 5, label: translate('friday') },
     { value: 6, label: translate('saturday') },
+    { value: 0, label: translate('sunday') },
   ];
 
   const toggleDay = (dayValue: number) => {

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Stretch",
-    "slug": "stretch",
+    "name": "StretchApp",
+    "slug": "stretchapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
@@ -10,10 +10,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.stretch.app"
+      "bundleIdentifier": "com.stretchapp.app"
     },
     "android": {
-      "package": "com.stretch.app",
+      "package": "com.stretchapp.app",
       "googleServicesFile": "./google-services.json"
     },
     "web": {

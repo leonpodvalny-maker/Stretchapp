@@ -32,7 +32,7 @@ export default function TrainingListScreen() {
   if (!training) {
     return (
       <View style={styles.container}>
-        <Text>Training not found</Text>
+        <Text>{translate('trainingNotFound')}</Text>
       </View>
     );
   }

@@ -34,6 +34,8 @@ const defaultSettings: UserSettings = {
   reminderEnabled: false,
   reminderDays: [],
   reminderTime: '09:00',
+  differentTimePerDay: false,
+  reminderTimesPerDay: {},
   ttsEnabled: false,
   pauseBetweenExercises: 10,
   isSynced: false,

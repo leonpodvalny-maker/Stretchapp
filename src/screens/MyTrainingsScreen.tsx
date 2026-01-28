@@ -32,11 +32,11 @@ export default function MyTrainingsScreen() {
 
   const handleCreateTraining = () => {
     if (!trainingName.trim()) {
-      Alert.alert('Error', 'Please enter a training name');
+      Alert.alert(translate('error'), translate('enterTrainingName'));
       return;
     }
     if (selectedExercises.length === 0) {
-      Alert.alert('Error', 'Please select at least one exercise');
+      Alert.alert(translate('error'), translate('selectAtLeastOneExercise'));
       return;
     }
 
@@ -44,7 +44,7 @@ export default function MyTrainingsScreen() {
     const newTraining: CustomTraining = {
       id: Date.now().toString(),
       name: trainingName,
-      description: trainingDescription || `Custom training with ${exercises.length} exercises`,
+      description: trainingDescription || `${translate('customTrainingWith')} ${exercises.length} ${exercises.length === 1 ? translate('exercise') : translate('exercisesPlural')}`,
       exercises,
       createdAt: new Date().toISOString(),
     };
@@ -54,7 +54,7 @@ export default function MyTrainingsScreen() {
     setTrainingDescription('');
     setSelectedExercises([]);
     setShowCreateForm(false);
-    Alert.alert('Success', 'Custom training created!');
+    Alert.alert(translate('success'), translate('customTrainingCreated'));
   };
 
   const toggleExercise = (exerciseId: string) => {
@@ -66,10 +66,10 @@ export default function MyTrainingsScreen() {
   };
 
   const handleDelete = (id: string) => {
-    Alert.alert('Delete Training', 'Are you sure?', [
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert(translate('deleteTraining'), translate('areYouSure'), [
+      { text: translate('cancel'), style: 'cancel' },
       {
-        text: 'Delete',
+        text: translate('delete'),
         style: 'destructive',
         onPress: () => deleteCustomTraining(id),
       },
@@ -121,7 +121,7 @@ export default function MyTrainingsScreen() {
                     selectedExercises.includes(exercise.id) && styles.exerciseTextSelected,
                   ]}
                 >
-                  {exercise.name}
+                  {exercise.nameKey ? translate(exercise.nameKey) : exercise.name}
                 </Text>
               </TouchableOpacity>
             ))}

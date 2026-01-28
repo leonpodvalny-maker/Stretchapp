@@ -2,7 +2,7 @@
 
 ## Overview
 
-Google Sign-In with automatic cloud synchronization has been successfully implemented in the Stretcher app. Users can now sign in with their Google accounts and have their data automatically synced across devices.
+Google Sign-In with automatic cloud synchronization has been successfully implemented in the StretchApp app. Users can now sign in with their Google accounts and have their data automatically synced across devices.
 
 ## What Was Implemented
 

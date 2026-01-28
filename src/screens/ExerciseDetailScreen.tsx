@@ -29,10 +29,14 @@ export default function ExerciseDetailScreen() {
 
   const [duration, setDuration] = useState(initialDuration || 30);
 
+  // Get translated exercise properties
+  const exerciseName = exercise?.nameKey ? translate(exercise.nameKey) : exercise?.name;
+  const exerciseDescription = exercise?.descriptionKey ? translate(exercise.descriptionKey) : exercise?.description;
+
   if (!exercise) {
     return (
       <View style={styles.container}>
-        <Text>Exercise not found</Text>
+        <Text>{translate('exerciseNotFound')}</Text>
       </View>
     );
   }
@@ -44,12 +48,12 @@ export default function ExerciseDetailScreen() {
           <ExerciseAnimation exerciseId={exerciseId} />
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.name}>{exercise.name}</Text>
-          <Text style={styles.description}>{exercise.description}</Text>
+          <Text style={styles.name}>{exerciseName}</Text>
+          <Text style={styles.description}>{exerciseDescription}</Text>
         </View>
         <View style={styles.selectorContainer}>
           <Text style={styles.label}>
-            {translate('duration')} ({translate('seconds')})
+            {translate('duration')} ({translate('minutes')}:{translate('seconds')})
           </Text>
           <TimeSelector
             value={duration}

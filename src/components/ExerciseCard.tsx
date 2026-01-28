@@ -12,7 +12,12 @@ interface ExerciseCardProps {
 }
 
 export default function ExerciseCard({ exercise, index, onPress, onDurationChange }: ExerciseCardProps) {
-  const { language } = useLanguage();
+  const { language, translate } = useLanguage();
+
+  // Get translated exercise properties
+  const exerciseName = exercise.nameKey ? translate(exercise.nameKey) : exercise.name;
+  const exerciseDescription = exercise.descriptionKey ? translate(exercise.descriptionKey) : exercise.description;
+  const exerciseStartingPosition = exercise.startingPositionKey ? translate(exercise.startingPositionKey) : exercise.startingPosition;
 
   // State for duration (in total seconds)
   const [totalSeconds, setTotalSeconds] = useState(exercise.defaultDuration);
@@ -87,7 +92,7 @@ export default function ExerciseCard({ exercise, index, onPress, onDurationChang
       onPress={onPress}
       activeOpacity={0.7}
       accessibilityRole="button"
-      accessibilityLabel={`${exercise.name}, ${t('duration', language)}: ${minutes} ${t('minutes', language)} ${seconds} ${t('seconds', language)}`}
+      accessibilityLabel={`${exerciseName}, ${t('duration', language)}: ${minutes} ${t('minutes', language)} ${seconds} ${t('seconds', language)}`}
     >
       {/* Image/Illustration Section */}
       <View style={styles.imageContainer}>
@@ -113,22 +118,22 @@ export default function ExerciseCard({ exercise, index, onPress, onDurationChang
 
         {/* Exercise Name */}
         <Text style={styles.exerciseName} numberOfLines={2}>
-          {exercise.name}
+          {exerciseName}
         </Text>
 
         {/* Description */}
         <Text style={styles.description} numberOfLines={3}>
-          {exercise.description}
+          {exerciseDescription}
         </Text>
 
         {/* Starting Position */}
-        {exercise.startingPosition && (
+        {exerciseStartingPosition && (
           <View style={styles.startingPositionContainer}>
             <Text style={styles.startingPositionLabel}>
               {t('startingPosition', language)}:
             </Text>
             <Text style={styles.startingPositionText} numberOfLines={2}>
-              {exercise.startingPosition}
+              {exerciseStartingPosition}
             </Text>
           </View>
         )}

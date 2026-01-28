@@ -10,6 +10,7 @@ import {
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import * as Speech from 'expo-speech';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useLanguage } from '../context/LanguageContext';
 import { useApp } from '../context/AppContext';
@@ -24,7 +25,7 @@ type NavigationProp = StackNavigationProp<RootStackParamList, 'WorkoutSession'>;
 export default function WorkoutSessionScreen() {
   const route = useRoute<RouteProps>();
   const navigation = useNavigation<NavigationProp>();
-  const { translate } = useLanguage();
+  const { translate, language } = useLanguage();
   const { customTrainings, settings, addTrainingHistory } = useApp();
   const { trainingId, exerciseDurations } = route.params;
 
@@ -44,6 +45,16 @@ export default function WorkoutSessionScreen() {
   const currentExercise = training?.exercises[currentExerciseIndex];
   const pauseDuration = settings?.pauseBetweenExercises || 10;
   const restTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isSpeakingRef = useRef(false);
+
+  // Helper function to get translated exercise properties
+  const getTranslatedExercise = (exercise: typeof currentExercise) => {
+    if (!exercise) return { name: '', description: '' };
+    return {
+      name: exercise.nameKey ? translate(exercise.nameKey) : exercise.name,
+      description: exercise.descriptionKey ? translate(exercise.descriptionKey) : exercise.description,
+    };
+  };
 
   useEffect(() => {
     if (!training) {
@@ -54,14 +65,95 @@ export default function WorkoutSessionScreen() {
     }
   }, [training]);
 
-  // Cleanup timeout on unmount
+  // Cleanup timeout and speech on unmount
   useEffect(() => {
     return () => {
       if (restTimeoutRef.current) {
         clearTimeout(restTimeoutRef.current);
       }
+      stopSpeech();
     };
   }, []);
+
+  // TTS function to speak exercise description
+  const speakExerciseDescription = async (exercise: typeof currentExercise) => {
+    if (!exercise) {
+      console.log('TTS: No exercise');
+      return;
+    }
+
+    if (!settings?.ttsEnabled) {
+      console.log('TTS: Disabled in settings', settings?.ttsEnabled);
+      return;
+    }
+
+    const translatedExercise = getTranslatedExercise(exercise);
+    console.log('TTS: Speaking exercise:', translatedExercise.name);
+
+    // Stop any ongoing speech
+    await stopSpeech();
+
+    // Map language codes to TTS language codes
+    const languageMap: Record<string, string> = {
+      en: 'en-US',
+      es: 'es-ES',
+      fr: 'fr-FR',
+      de: 'de-DE',
+      ru: 'ru-RU',
+      zh: 'zh-CN',
+      ja: 'ja-JP',
+    };
+
+    const ttsLanguage = languageMap[language] || 'en-US';
+    const textToSpeak = `${translatedExercise.name}. ${translatedExercise.description}`;
+
+    console.log('TTS: Text to speak:', textToSpeak);
+    console.log('TTS: Language:', ttsLanguage);
+
+    try {
+      isSpeakingRef.current = true;
+      await Speech.speak(textToSpeak, {
+        language: ttsLanguage,
+        pitch: 1.0,
+        rate: 0.85,
+        onDone: () => {
+          console.log('TTS: Done speaking');
+          isSpeakingRef.current = false;
+        },
+        onStopped: () => {
+          console.log('TTS: Stopped');
+          isSpeakingRef.current = false;
+        },
+        onError: (error) => {
+          console.log('TTS: Error callback', error);
+          isSpeakingRef.current = false;
+        },
+      });
+      console.log('TTS: Speech started');
+    } catch (error) {
+      console.error('TTS Error:', error);
+      isSpeakingRef.current = false;
+    }
+  };
+
+  // Stop TTS speech
+  const stopSpeech = async () => {
+    try {
+      if (isSpeakingRef.current) {
+        await Speech.stop();
+        isSpeakingRef.current = false;
+      }
+    } catch (error) {
+      console.error('Error stopping speech:', error);
+    }
+  };
+
+  // Speak exercise description when new exercise starts
+  useEffect(() => {
+    if (currentExercise && !isResting && settings?.ttsEnabled) {
+      speakExerciseDescription(currentExercise);
+    }
+  }, [currentExerciseIndex, isResting]);
 
   useEffect(() => {
     if (isPaused || !currentExercise) return;
@@ -83,13 +175,17 @@ export default function WorkoutSessionScreen() {
   const handleExerciseComplete = () => {
     if (!currentExercise || !training) return;
 
+    // Stop any ongoing speech
+    stopSpeech();
+
     const exerciseDuration = exerciseDurations[currentExerciseIndex] || currentExercise.defaultDuration;
+    const translatedExercise = getTranslatedExercise(currentExercise);
 
     setCompletedExercises((prev) => [
       ...prev,
       {
         exerciseId: currentExercise.id,
-        exerciseName: currentExercise.name,
+        exerciseName: translatedExercise.name,
         duration: exerciseDuration,
       },
     ]);
@@ -123,6 +219,8 @@ export default function WorkoutSessionScreen() {
     // Use translation key if available, otherwise use hardcoded name
     const displayName = training.nameKey ? translate(training.nameKey) : training.name;
 
+    const finalExercise = getTranslatedExercise(currentExercise);
+
     const history: TrainingHistory = {
       id: Date.now().toString(),
       trainingId: training.id,
@@ -132,7 +230,7 @@ export default function WorkoutSessionScreen() {
         ...completedExercises,
         {
           exerciseId: currentExercise!.id,
-          exerciseName: currentExercise!.name,
+          exerciseName: finalExercise.name,
           duration: exerciseDurations[currentExerciseIndex] || currentExercise!.defaultDuration,
         },
       ],
@@ -159,6 +257,12 @@ export default function WorkoutSessionScreen() {
 
   const handlePauseResume = () => {
     if (isResting) return; // Don't allow pause during rest
+
+    if (!isPaused) {
+      // Pausing - stop speech
+      stopSpeech();
+    }
+
     setIsPaused(!isPaused);
   };
 
@@ -178,6 +282,7 @@ export default function WorkoutSessionScreen() {
             if (restTimeoutRef.current) {
               clearTimeout(restTimeoutRef.current);
             }
+            stopSpeech();
             navigation.goBack();
           },
         },
@@ -191,6 +296,11 @@ export default function WorkoutSessionScreen() {
 
   // Use translation key if available, otherwise use hardcoded name
   const displayName = training.nameKey ? translate(training.nameKey) : training.name;
+  const translatedCurrentExercise = getTranslatedExercise(currentExercise);
+
+  // Get translated name for next exercise
+  const nextExercise = training.exercises[currentExerciseIndex + 1];
+  const translatedNextExercise = nextExercise ? getTranslatedExercise(nextExercise) : null;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -210,13 +320,13 @@ export default function WorkoutSessionScreen() {
           <>
             <Text style={styles.restingText}>{translate('resting')}</Text>
             <Text style={styles.nextExerciseText}>
-              {translate('next')}: {training.exercises[currentExerciseIndex + 1]?.name}
+              {translate('next')}: {translatedNextExercise?.name}
             </Text>
           </>
         ) : (
           <>
-            <Text style={styles.exerciseName}>{currentExercise.name}</Text>
-            <Text style={styles.exerciseDescription}>{currentExercise.description}</Text>
+            <Text style={styles.exerciseName}>{translatedCurrentExercise.name}</Text>
+            <Text style={styles.exerciseDescription}>{translatedCurrentExercise.description}</Text>
           </>
         )}
       </View>
